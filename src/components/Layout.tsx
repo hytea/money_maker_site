@@ -1,16 +1,19 @@
 import { Link, Outlet } from 'react-router-dom';
-import { Calculator, Sparkles } from 'lucide-react';
+import { Calculator, Sparkles, Menu, X } from 'lucide-react';
 import { AdPlaceholder } from './AdSense';
 import { Separator } from './ui/separator';
+import { useState } from 'react';
 
 export function Layout() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
       <header className="bg-white/90 backdrop-blur-lg border-b border-gray-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <Link to="/" className="flex items-center space-x-3 group">
+            <Link to="/" className="flex items-center space-x-3 group" onClick={() => setMobileMenuOpen(false)}>
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-primary-500 to-accent-500 rounded-lg blur-md opacity-50 group-hover:opacity-75 transition-opacity"></div>
                 <div className="relative bg-gradient-to-r from-primary-600 to-accent-600 p-2 rounded-lg">
@@ -24,6 +27,8 @@ export function Layout() {
                 <span className="text-[10px] text-gray-500 -mt-1 tracking-wide">FREE TOOLS</span>
               </div>
             </Link>
+
+            {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-1">
               <Link
                 to="/"
@@ -38,12 +43,47 @@ export function Layout() {
                 About
               </Link>
             </nav>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg text-gray-700 hover:bg-primary-50 transition-colors"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </button>
           </div>
+
+          {/* Mobile Navigation */}
+          {mobileMenuOpen && (
+            <div className="md:hidden py-4 border-t border-gray-200 animate-fade-in">
+              <nav className="flex flex-col space-y-2">
+                <Link
+                  to="/"
+                  className="px-4 py-3 rounded-lg text-gray-700 hover:text-primary-700 hover:bg-primary-50 font-medium transition-all"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  All Tools
+                </Link>
+                <Link
+                  to="/about"
+                  className="px-4 py-3 rounded-lg text-gray-700 hover:text-primary-700 hover:bg-primary-50 font-medium transition-all"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  About
+                </Link>
+              </nav>
+            </div>
+          )}
         </div>
       </header>
 
-      {/* Top Banner Ad */}
-      <div className="bg-gradient-to-r from-primary-50/50 to-accent-50/50 border-b border-gray-200">
+      {/* Top Banner Ad - Hidden on mobile, visible on desktop */}
+      <div className="bg-gradient-to-r from-primary-50/50 to-accent-50/50 border-b border-gray-200 hidden md:block">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <AdPlaceholder label="Header Banner Ad" className="max-w-4xl mx-auto" />
         </div>

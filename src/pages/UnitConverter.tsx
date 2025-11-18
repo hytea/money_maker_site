@@ -80,63 +80,84 @@ export function UnitConverter() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Unit Converter</h1>
-        <p className="text-gray-600">Convert cooking, weight, and distance measurements</p>
+    <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6 md:py-8">
+      <div className="mb-6 md:mb-8 text-center md:text-left">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">Unit Converter</h1>
+        <p className="text-base md:text-lg text-gray-600">Convert cooking, weight, and distance measurements</p>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-6">
+      {/* Mobile Results - Sticky at top */}
+      {fromValue && toValue && (
+        <Card className="md:hidden bg-indigo-50 border-indigo-200 sticky top-20 z-10 shadow-lg mb-4">
+          <CardContent className="pt-4 space-y-3">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-xs text-indigo-700 mb-1">From</p>
+                <p className="text-xl font-bold text-indigo-900">{fromValue}</p>
+                <p className="text-xs text-indigo-700">{conversions[category].units[fromUnit].name}</p>
+              </div>
+              <div>
+                <p className="text-xs text-indigo-700 mb-1">To</p>
+                <p className="text-xl font-bold text-indigo-900">{toValue}</p>
+                <p className="text-xs text-indigo-700">{conversions[category].units[toUnit].name}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      <div className="grid md:grid-cols-3 gap-4 md:gap-6">
         <div className="md:col-span-2">
           <Card>
             <CardHeader>
               <CardTitle>Convert Units</CardTitle>
               <CardDescription>Select category and enter values</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-4 md:space-y-6">
               <div>
-                <Label>Conversion Type</Label>
-                <div className="flex gap-2 mt-2">
+                <Label className="text-sm md:text-base">Conversion Type</Label>
+                <div className="grid grid-cols-3 gap-2 mt-2">
                   <Button
                     variant={category === 'cooking' ? 'default' : 'outline'}
                     onClick={() => handleCategoryChange('cooking')}
-                    className="flex-1"
+                    className="h-14 md:h-12 text-base md:text-sm font-bold"
                   >
                     Cooking
                   </Button>
                   <Button
                     variant={category === 'weight' ? 'default' : 'outline'}
                     onClick={() => handleCategoryChange('weight')}
-                    className="flex-1"
+                    className="h-14 md:h-12 text-base md:text-sm font-bold"
                   >
                     Weight
                   </Button>
                   <Button
                     variant={category === 'distance' ? 'default' : 'outline'}
                     onClick={() => handleCategoryChange('distance')}
-                    className="flex-1"
+                    className="h-14 md:h-12 text-base md:text-sm font-bold"
                   >
                     Distance
                   </Button>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="fromValue">From</Label>
+                  <Label htmlFor="fromValue" className="text-sm md:text-base">From</Label>
                   <Input
                     id="fromValue"
                     type="number"
+                    inputMode="decimal"
                     step="any"
                     placeholder="1"
                     value={fromValue}
                     onChange={(e) => setFromValue(e.target.value)}
-                    className="text-lg mb-2"
+                    className="text-lg mb-2 h-14 md:h-12"
                   />
                   <select
                     value={fromUnit}
                     onChange={(e) => setFromUnit(e.target.value)}
-                    className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm"
+                    className="flex h-14 md:h-12 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm"
                   >
                     {Object.entries(conversions[category].units).map(([key, unit]) => (
                       <option key={key} value={key}>{unit.name}</option>
@@ -145,18 +166,18 @@ export function UnitConverter() {
                 </div>
 
                 <div>
-                  <Label htmlFor="toValue">To</Label>
+                  <Label htmlFor="toValue" className="text-sm md:text-base">To</Label>
                   <Input
                     id="toValue"
                     type="text"
                     value={toValue}
                     readOnly
-                    className="text-lg mb-2 bg-gray-50"
+                    className="text-lg mb-2 bg-gray-50 h-14 md:h-12"
                   />
                   <select
                     value={toUnit}
                     onChange={(e) => setToUnit(e.target.value)}
-                    className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm"
+                    className="flex h-14 md:h-12 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm"
                   >
                     {Object.entries(conversions[category].units).map(([key, unit]) => (
                       <option key={key} value={key}>{unit.name}</option>
@@ -167,12 +188,13 @@ export function UnitConverter() {
             </CardContent>
           </Card>
 
-          <div className="mt-6">
+          <div className="mt-6 hidden md:block">
             <AdPlaceholder label="Unit Converter Ad" />
           </div>
         </div>
 
-        <div className="md:col-span-1">
+        {/* Desktop Results - Hidden on mobile */}
+        <div className="hidden md:block md:col-span-1">
           <Card className="bg-indigo-50 border-indigo-200 sticky top-24">
             <CardHeader>
               <CardTitle className="text-indigo-900">Quick Reference</CardTitle>
@@ -207,7 +229,7 @@ export function UnitConverter() {
         </div>
       </div>
 
-      <div className="mt-8 prose max-w-none">
+      <div className="mt-8 md:mt-12 prose max-w-none">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Common Unit Conversions</h2>
         <div className="grid md:grid-cols-3 gap-6">
           <div>
