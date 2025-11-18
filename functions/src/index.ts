@@ -27,6 +27,78 @@ interface RateLimitEntry {
 const rateLimitStore: Map<string, RateLimitEntry> = new Map();
 
 /**
+ * Emergency keywords that indicate immediate medical attention is needed
+ * If detected, the function will return an emergency response instead of AI
+ */
+const EMERGENCY_KEYWORDS = [
+  // Cardiac/breathing emergencies
+  'heart attack', 'chest pain', 'can\'t breathe', 'cannot breathe', 'difficulty breathing',
+  'shortness of breath', 'choking', 'cardiac arrest',
+
+  // Severe injuries
+  'severe bleeding', 'heavy bleeding', 'bleeding won\'t stop', 'broken bone', 'head injury',
+  'unconscious', 'passed out', 'losing consciousness',
+
+  // Neurological emergencies
+  'stroke', 'can\'t move', 'cannot move', 'paralyzed', 'seizure', 'convulsion',
+  'slurred speech', 'face drooping',
+
+  // Severe pain
+  'severe pain', 'unbearable pain', 'excruciating pain', 'worst pain',
+
+  // Poisoning/overdose
+  'overdose', 'poisoning', 'swallowed', 'ingested', 'toxic',
+
+  // Mental health crises
+  'suicidal', 'suicide', 'kill myself', 'end my life', 'want to die',
+  'self harm', 'self-harm',
+
+  // Pregnancy emergencies
+  'severe abdominal pain', 'pregnancy bleeding', 'pregnancy pain',
+
+  // Other critical
+  'anaphylaxis', 'allergic reaction', 'can\'t swallow', 'vomiting blood',
+  'coughing blood', 'blood in stool', 'severe burn'
+];
+
+/**
+ * Check if prompt contains emergency keywords
+ */
+function detectEmergency(text: string): boolean {
+  const lowerText = text.toLowerCase();
+  return EMERGENCY_KEYWORDS.some(keyword => lowerText.includes(keyword));
+}
+
+/**
+ * Emergency response that will be returned instead of AI when emergency detected
+ */
+const EMERGENCY_RESPONSE = {
+  isEmergency: true,
+  content: `🚨 EMERGENCY DETECTED 🚨
+
+If you are experiencing a medical emergency, please:
+
+1. CALL EMERGENCY SERVICES IMMEDIATELY:
+   • United States: 911
+   • United Kingdom: 999
+   • European Union: 112
+   • Australia: 000
+
+2. DO NOT WAIT for AI advice in emergency situations
+
+3. If you're unable to call:
+   • Ask someone nearby to call for you
+   • Text emergency services if available in your area
+   • Go to the nearest emergency room
+
+This AI health coach is NOT designed for emergencies and cannot provide emergency medical care.
+
+Your life is precious - please seek immediate professional help.
+
+If this is not an emergency and you need general health advice, please rephrase your question.`
+};
+
+/**
  * Check if request exceeds rate limits
  */
 function checkRateLimit(identifier: string, limit: number): boolean {
@@ -133,6 +205,23 @@ export const aiChat = functions
         });
 
         console.warn(`IP rate limit exceeded: ${clientIp}`);
+        return;
+      }
+
+      // CRITICAL SAFETY CHECK: Detect medical emergencies
+      if (detectEmergency(prompt)) {
+        console.warn('Emergency keywords detected:', {
+          user: userIdentifier,
+          ip: clientIp,
+          promptLength: prompt.length
+        });
+
+        // Return emergency response immediately, don't call AI
+        res.status(200).json({
+          content: EMERGENCY_RESPONSE.content,
+          isEmergency: true,
+          model: 'emergency-detection-system'
+        });
         return;
       }
 

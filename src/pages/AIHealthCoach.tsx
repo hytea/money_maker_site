@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { AdPlaceholder } from '@/components/AdSense';
 import { useAI } from '@/hooks/useAI';
+import DOMPurify from 'dompurify';
 import {
   MessageCircle,
   Send,
@@ -24,6 +25,7 @@ interface Message {
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
+  isEmergency?: boolean;
 }
 
 const STORAGE_KEY = 'ai-health-coach-messages';
@@ -31,6 +33,62 @@ const DISCLAIMER_ACCEPTED_KEY = 'ai-health-coach-disclaimer-accepted';
 const MAX_INPUT_LENGTH = 500;
 const RATE_LIMIT_WINDOW = 60000; // 1 minute
 const MAX_REQUESTS_PER_WINDOW = 10;
+const MAX_MESSAGES_STORED = 100; // Limit to prevent quota issues
+const STORAGE_CHECK_THRESHOLD = 0.8; // Warn at 80% quota
+
+/**
+ * Proactive localStorage management
+ * Checks available space and cleans up old messages automatically
+ */
+class StorageManager {
+  /**
+   * Estimate localStorage usage (rough approximation)
+   */
+  static getUsagePercentage(): number {
+    try {
+      let totalSize = 0;
+      for (let key in localStorage) {
+        if (localStorage.hasOwnProperty(key)) {
+          totalSize += localStorage[key].length + key.length;
+        }
+      }
+      // Most browsers allow ~5-10MB, we'll assume 5MB = 5,000,000 bytes
+      const estimatedQuota = 5000000;
+      return totalSize / estimatedQuota;
+    } catch {
+      return 0;
+    }
+  }
+
+  /**
+   * Remove oldest messages to free up space
+   */
+  static cleanupOldMessages(messages: Message[], keepCount: number = 50): Message[] {
+    if (messages.length <= keepCount) return messages;
+
+    // Keep only the most recent messages
+    return messages.slice(-keepCount);
+  }
+
+  /**
+   * Check if we're approaching quota and cleanup if needed
+   */
+  static proactiveCleanup(messages: Message[]): Message[] {
+    const usage = this.getUsagePercentage();
+
+    if (usage > STORAGE_CHECK_THRESHOLD) {
+      console.warn(`localStorage usage at ${(usage * 100).toFixed(1)}%, cleaning up old messages`);
+      return this.cleanupOldMessages(messages, 30);
+    }
+
+    if (messages.length > MAX_MESSAGES_STORED) {
+      console.warn(`Message count (${messages.length}) exceeds limit, cleaning up`);
+      return this.cleanupOldMessages(messages, 50);
+    }
+
+    return messages;
+  }
+}
 
 const SYSTEM_PROMPT = `You are a knowledgeable and supportive health coach. You provide evidence-based advice on nutrition, fitness, wellness, and healthy lifestyle habits.
 
@@ -109,16 +167,42 @@ export function AIHealthCoach() {
     }
   }, []);
 
-  // Save messages to localStorage whenever they change (with error handling)
+  // Save messages to localStorage with proactive cleanup
   useEffect(() => {
     if (messages.length > 0) {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
-        setStorageError(null);
+        // Proactive cleanup before saving
+        const cleanedMessages = StorageManager.proactiveCleanup(messages);
+
+        // If cleanup occurred, update state
+        if (cleanedMessages.length < messages.length) {
+          setMessages(cleanedMessages);
+          setStorageError(`Automatically removed ${messages.length - cleanedMessages.length} old messages to free up space.`);
+          // Clear error after 5 seconds
+          setTimeout(() => setStorageError(null), 5000);
+        }
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(cleanedMessages));
+
+        // Show warning if approaching quota
+        const usage = StorageManager.getUsagePercentage();
+        if (usage > STORAGE_CHECK_THRESHOLD && !storageError) {
+          setStorageError(`Storage ${(usage * 100).toFixed(0)}% full. Consider exporting and clearing chat history.`);
+        } else if (usage < STORAGE_CHECK_THRESHOLD) {
+          setStorageError(null);
+        }
       } catch (e) {
         // Handle quota exceeded error
         if (e instanceof DOMException && (e.name === 'QuotaExceededError' || e.code === 22)) {
-          setStorageError('Chat history storage is full. Please export and clear your chat.');
+          // Emergency cleanup - keep only last 20 messages
+          const emergencyCleanup = messages.slice(-20);
+          try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(emergencyCleanup));
+            setMessages(emergencyCleanup);
+            setStorageError('Storage full! Automatically removed old messages. Please export important conversations.');
+          } catch {
+            setStorageError('Chat history storage is full. Please export and clear your chat immediately.');
+          }
         } else {
           setStorageError('Unable to save chat history');
         }
@@ -190,17 +274,32 @@ export function AIHealthCoach() {
     try {
       const response = await ask(prompt, SYSTEM_PROMPT);
 
+      // CRITICAL: Sanitize AI response to prevent XSS attacks
+      // Even though React escapes by default, AI could generate malicious content
+      const sanitizedContent = DOMPurify.sanitize(response, {
+        ALLOWED_TAGS: [], // Strip all HTML tags
+        ALLOWED_ATTR: [], // Strip all attributes
+        KEEP_CONTENT: true // Keep text content
+      });
+
       const assistantMessage: Message = {
         role: 'assistant',
-        content: response,
-        timestamp: new Date()
+        content: sanitizedContent,
+        timestamp: new Date(),
+        isEmergency: false
       };
 
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
+      // Sanitize error message too
+      const sanitizedError = DOMPurify.sanitize(
+        "I apologize, but I'm having trouble responding right now. Please try again in a moment.",
+        { ALLOWED_TAGS: [], ALLOWED_ATTR: [], KEEP_CONTENT: true }
+      );
+
       const errorMessage: Message = {
         role: 'assistant',
-        content: "I apologize, but I'm having trouble responding right now. Please try again in a moment.",
+        content: sanitizedError,
         timestamp: new Date()
       };
       setMessages(prev => [...prev, errorMessage]);
@@ -441,36 +540,51 @@ export function AIHealthCoach() {
 
                 {/* Messages Container */}
                 <div className="min-h-[400px] max-h-[500px] overflow-y-auto mb-4 space-y-4 pr-2">
-                  {messages.map((message, index) => (
-                    <div
-                      key={index}
-                      className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                    >
+                  {messages.map((message, index) => {
+                    const isEmergency = message.isEmergency || message.content.includes('🚨 EMERGENCY DETECTED');
+
+                    return (
                       <div
-                        className={`max-w-[80%] rounded-2xl px-4 py-3 ${
-                          message.role === 'user'
-                            ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white'
-                            : 'bg-gray-100 text-gray-900 border border-gray-200'
-                        }`}
+                        key={index}
+                        className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                       >
-                        <div className="flex items-start gap-2">
-                          {message.role === 'assistant' && (
-                            <Sparkles className="w-4 h-4 mt-1 flex-shrink-0 text-emerald-600" />
-                          )}
-                          <div className="flex-1">
-                            <p className="text-sm leading-relaxed whitespace-pre-wrap">
-                              {message.content}
-                            </p>
-                            <p className={`text-xs mt-2 ${
-                              message.role === 'user' ? 'text-emerald-100' : 'text-gray-500'
-                            }`}>
-                              {message.timestamp.toLocaleTimeString()}
-                            </p>
+                        <div
+                          className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+                            message.role === 'user'
+                              ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white'
+                              : isEmergency
+                              ? 'bg-red-50 text-red-900 border-2 border-red-500'
+                              : 'bg-gray-100 text-gray-900 border border-gray-200'
+                          }`}
+                        >
+                          <div className="flex items-start gap-2">
+                            {message.role === 'assistant' && !isEmergency && (
+                              <Sparkles className="w-4 h-4 mt-1 flex-shrink-0 text-emerald-600" />
+                            )}
+                            {isEmergency && (
+                              <ShieldAlert className="w-5 h-5 mt-1 flex-shrink-0 text-red-600" />
+                            )}
+                            <div className="flex-1">
+                              <p className={`text-sm leading-relaxed whitespace-pre-wrap ${
+                                isEmergency ? 'font-semibold' : ''
+                              }`}>
+                                {message.content}
+                              </p>
+                              <p className={`text-xs mt-2 ${
+                                message.role === 'user'
+                                  ? 'text-emerald-100'
+                                  : isEmergency
+                                  ? 'text-red-700'
+                                  : 'text-gray-500'
+                              }`}>
+                                {message.timestamp.toLocaleTimeString()}
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
 
                   {/* Loading Indicator */}
                   {isLoading && (

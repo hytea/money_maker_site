@@ -86,7 +86,119 @@ Client Browser          Firebase Cloud          OpenRouter API
 
 ---
 
-### 4. Input Validation
+### 4. Emergency Detection & Content Moderation
+
+**Location**: `functions/src/index.ts`
+**Status**: CRITICAL SAFETY FEATURE
+
+**Problem**: AI could provide harmful advice for medical emergencies, creating serious liability.
+
+**Solution**: Server-side keyword detection that intercepts emergency situations before AI processing.
+
+#### Emergency Keywords Monitored
+- **Cardiac/Breathing**: heart attack, chest pain, can't breathe, choking
+- **Neurological**: stroke, seizure, paralyzed, unconscious
+- **Mental Health**: suicidal, suicide, self-harm
+- **Severe Pain**: severe pain, unbearable pain
+- **Poisoning**: overdose, poisoning, toxic
+- **Allergic**: anaphylaxis, severe allergic reaction
+- **Other Critical**: severe bleeding, head injury, pregnancy bleeding
+
+#### Behavior
+When emergency keywords detected:
+1. **Immediate Interception**: AI is NOT called
+2. **Emergency Response**: Returns pre-written emergency message with:
+   - 🚨 Clear emergency warning
+   - Emergency numbers (911, 999, 112, 000)
+   - Instructions to seek immediate help
+   - Warning not to wait for AI advice
+3. **Logging**: Logs emergency detection for monitoring
+4. **Special UI**: Displayed in red alert styling
+
+**Legal Protection**: Actively prevents AI from giving advice in emergencies, reducing liability
+
+---
+
+### 5. XSS Protection via DOMPurify
+
+**Location**: `src/pages/AIHealthCoach.tsx`
+**Status**: CRITICAL SECURITY FEATURE
+
+**Problem**: AI responses could contain malicious HTML/JavaScript that executes in user's browser.
+
+**Solution**: All AI responses sanitized with DOMPurify before storage or display.
+
+#### Implementation
+```typescript
+const sanitizedContent = DOMPurify.sanitize(response, {
+  ALLOWED_TAGS: [],     // Strip ALL HTML tags
+  ALLOWED_ATTR: [],     // Strip ALL attributes
+  KEEP_CONTENT: true    // Keep safe text content
+});
+```
+
+#### What This Prevents
+- ✅ `<script>` tag injection
+- ✅ Event handler injection (`onclick`, etc.)
+- ✅ `<iframe>` embedding
+- ✅ CSS injection
+- ✅ Data URL attacks
+- ✅ Any other HTML-based XSS
+
+**Defense in Depth**: Even though React escapes by default, this adds explicit protection against AI-generated malicious content.
+
+---
+
+### 6. Proactive localStorage Management
+
+**Location**: `src/pages/AIHealthCoach.tsx` - `StorageManager` class
+**Status**: CRITICAL RELIABILITY FEATURE
+
+**Problem**: localStorage quota exceeded causes silent failures and app crashes.
+
+**Solution**: Multi-layer storage management with automatic cleanup.
+
+#### Features
+
+**1. Automatic Quota Monitoring**
+```typescript
+- Estimates storage usage percentage
+- Warns at 80% quota usage
+- Triggers cleanup automatically
+```
+
+**2. Proactive Message Cleanup**
+```typescript
+- Limits to 100 messages maximum
+- Auto-removes oldest messages when approaching limits
+- Emergency cleanup to last 20 messages on quota error
+```
+
+**3. Graceful Degradation**
+```typescript
+- Try-catch around all storage operations
+- Specific handling for QuotaExceededError
+- User-friendly error messages
+- Auto-cleanup suggestions
+```
+
+**4. User Notifications**
+```typescript
+- "Automatically removed X old messages to free up space"
+- "Storage 85% full. Consider exporting chat history"
+- Emergency: "Storage full! Automatically removed old messages"
+```
+
+#### Benefits
+- ✅ No silent failures
+- ✅ App continues working even when quota approached
+- ✅ Users notified before problems occur
+- ✅ Automatic recovery from quota errors
+- ✅ Preserves most recent conversations
+
+---
+
+### 7. Input Validation
 
 **Location**: Both client and server
 
@@ -110,22 +222,7 @@ MAX_INPUT_LENGTH = 500 characters
 
 ---
 
-### 5. localStorage Quota Handling
-
-**Location**: `src/pages/AIHealthCoach.tsx`
-
-**Features**:
-- Try-catch wrapper around localStorage operations
-- Detects `QuotaExceededError` specifically
-- User-friendly error messages
-- Suggests exporting and clearing chat
-- Graceful degradation if storage fails
-
-**Why Important**: Prevents app crashes when localStorage is full or disabled
-
----
-
-### 6. Error Handling & Logging
+### 8. Error Handling & Logging
 
 #### Client-Side
 - User-friendly error messages (no technical details exposed)
@@ -134,6 +231,13 @@ MAX_INPUT_LENGTH = 500 characters
 
 #### Server-Side (`functions/src/index.ts`)
 ```typescript
+// Emergency detection logging (CRITICAL)
+console.warn('Emergency keywords detected:', {
+  user: userIdentifier,
+  ip: clientIp,
+  promptLength: prompt.length
+});
+
 // Structured logging for monitoring
 console.log('AI request processed:', {
   user: userIdentifier,
@@ -149,6 +253,7 @@ console.warn('Rate limit exceeded:', { user, ip });
 ```
 
 **Benefits**:
+- **Emergency tracking**: Monitor potential crisis situations
 - Detect usage patterns
 - Identify abuse attempts
 - Monitor API costs
@@ -253,16 +358,37 @@ The app will show a console warning:
 
 ## Security Checklist for Production
 
+### Critical Security Features
 - [ ] OpenRouter API key is set in Firebase config (server-side)
 - [ ] `VITE_OPENROUTER_API_KEY` is NOT set in production .env
 - [ ] `VITE_FIREBASE_FUNCTION_URL` points to deployed function
 - [ ] CORS is restricted to your domain (not `*`)
 - [ ] Firebase Functions are deployed
-- [ ] Rate limiting is tested and working
+- [ ] Rate limiting is tested and working (client & server)
+
+### Medical Safety & Liability
 - [ ] Medical disclaimer appears on first use
+- [ ] Emergency keyword detection is active (test with "heart attack")
+- [ ] Emergency responses display in red alert styling
+- [ ] Emergency detection logs appear in function logs
+
+### XSS & Input Security
+- [ ] DOMPurify is installed and working
+- [ ] AI responses are sanitized before display
+- [ ] Input validation enforces 500 char limit
 - [ ] Error messages don't expose sensitive details
+
+### Storage & Reliability
+- [ ] localStorage quota monitoring is active
+- [ ] Automatic message cleanup triggers at 100 messages
+- [ ] Emergency cleanup works when quota exceeded
+- [ ] Storage warnings appear at 80% usage
+
+### General
 - [ ] Usage monitoring is configured
 - [ ] .env files are in .gitignore
+- [ ] All dependencies are up to date
+- [ ] Build completes without errors
 
 ---
 
@@ -275,10 +401,13 @@ firebase functions:log
 
 ### Monitor Usage
 Check logs for:
+- **Emergency keyword detections** (CRITICAL - may indicate users in crisis)
 - High request volumes from single users/IPs
 - Error rates
 - Response times
 - OpenRouter API usage costs
+- localStorage quota warnings
+- DOMPurify sanitization triggers
 
 ### Rate Limit Adjustments
 
