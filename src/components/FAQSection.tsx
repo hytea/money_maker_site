@@ -63,7 +63,7 @@ export function FAQSection({ toolPath, limit }: FAQSectionProps) {
             >
               <button
                 onClick={() => setOpenIndex(isOpen ? null : index)}
-                className="w-full px-5 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors"
+                className="w-full px-5 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors cursor-pointer"
                 aria-expanded={isOpen}
               >
                 <span className="font-semibold text-gray-900 pr-4">
