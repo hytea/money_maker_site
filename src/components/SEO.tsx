@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { tools, homePage } from '@/config/tools';
+import { analytics } from '@/lib/analytics';
 
 export function SEO() {
   const location = useLocation();
@@ -66,6 +67,13 @@ export function SEO() {
           document.head.appendChild(tag);
         }
         tag.setAttribute('content', content);
+      });
+
+      // Track page view with analytics
+      analytics.trackPageView({
+        path: location.pathname,
+        title: pageConfig.title,
+        referrer: document.referrer,
       });
     }
   }, [location]);

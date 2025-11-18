@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { AdPlaceholder } from '@/components/AdSense';
 import { DollarSign, Users, TrendingUp, CheckCircle2 } from 'lucide-react';
+import { useAnalytics } from '@/hooks/useAnalytics';
 
 export function TipCalculator() {
   const [billAmount, setBillAmount] = useState('');
@@ -16,6 +17,8 @@ export function TipCalculator() {
   const [tipAmount, setTipAmount] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
   const [perPerson, setPerPerson] = useState(0);
+
+  const { trackCalculatorResult, trackButtonClick } = useAnalytics();
 
   useEffect(() => {
     document.title = 'Tip Calculator - Calculate Tips and Split Bills | QuickCalc Tools';
@@ -33,7 +36,18 @@ export function TipCalculator() {
     setTipAmount(tipAmt);
     setTotalAmount(total);
     setPerPerson(perPersonAmt);
-  }, [billAmount, tipPercent, numPeople]);
+
+    // Track calculation if we have valid inputs
+    if (billAmount && parseFloat(billAmount) > 0) {
+      trackCalculatorResult('tip-calculator', {
+        billAmount: bill,
+        tipPercent: tip,
+        numPeople: people,
+        tipAmount: tipAmt,
+        totalAmount: total,
+      });
+    }
+  }, [billAmount, tipPercent, numPeople, trackCalculatorResult]);
 
   const quickTipButtons = [10, 15, 18, 20, 25];
 
@@ -114,7 +128,10 @@ export function TipCalculator() {
                     <Button
                       key={percent}
                       variant={tipPercent === percent.toString() ? 'default' : 'outline'}
-                      onClick={() => setTipPercent(percent.toString())}
+                      onClick={() => {
+                        setTipPercent(percent.toString());
+                        trackButtonClick(`quick-tip-${percent}`, 'tip-calculator');
+                      }}
                       className="h-14 md:h-12 text-base md:text-sm font-bold"
                       size="lg"
                     >
