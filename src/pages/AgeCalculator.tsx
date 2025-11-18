@@ -60,27 +60,25 @@ export function AgeCalculator() {
         <p className="text-base md:text-lg text-gray-600">Calculate your exact age in years, months, and days</p>
       </div>
 
-      {/* Mobile Results - Sticky at top */}
+      {/* Mobile Results - Compact summary */}
       {birthDate && (
-        <Card className="md:hidden bg-orange-50 border-orange-200 sticky top-20 z-10 shadow-lg mb-4">
-          <CardContent className="pt-4 space-y-3">
-            <div>
-              <p className="text-xs text-orange-700 mb-1">Your Age</p>
-              <p className="text-2xl font-bold text-orange-900">{years} years</p>
-              <p className="text-base text-orange-800">
-                {months} months, {days} days
-              </p>
-            </div>
-            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-orange-200">
+        <Card className="md:hidden bg-orange-50 border-orange-200 shadow-md mb-4">
+          <CardContent className="p-3">
+            <div className="grid grid-cols-3 gap-2 text-center">
               <div>
-                <p className="text-xs text-orange-700 mb-1">Total Days</p>
-                <p className="text-lg font-bold text-orange-900">
+                <p className="text-xs text-orange-700 mb-0.5">Age</p>
+                <p className="text-lg font-bold text-orange-900">{years}y</p>
+                <p className="text-xs text-orange-800">{months}m {days}d</p>
+              </div>
+              <div>
+                <p className="text-xs text-orange-700 mb-0.5">Total Days</p>
+                <p className="text-sm font-bold text-orange-900">
                   {totalDays.toLocaleString()}
                 </p>
               </div>
               <div>
-                <p className="text-xs text-orange-700 mb-1">Next Birthday</p>
-                <p className="text-lg font-bold text-orange-900">
+                <p className="text-xs text-orange-700 mb-0.5">Next Birthday</p>
+                <p className="text-sm font-bold text-orange-900">
                   {nextBirthday} days
                 </p>
               </div>
