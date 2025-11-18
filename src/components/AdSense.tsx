@@ -8,6 +8,8 @@ interface AdSenseProps {
 }
 
 export function AdSense({ slot, format = 'auto', responsive = true, className = '' }: AdSenseProps) {
+  const publisherId = import.meta.env.VITE_ADSENSE_PUBLISHER_ID;
+
   useEffect(() => {
     try {
       // @ts-ignore
@@ -20,12 +22,17 @@ export function AdSense({ slot, format = 'auto', responsive = true, className = 
     }
   }, []);
 
+  // Don't render ad if publisher ID is not configured
+  if (!publisherId || publisherId === 'ca-pub-XXXXXXXXXXXXXXXX') {
+    return <AdPlaceholder label="AdSense Not Configured" className={className} />;
+  }
+
   return (
     <div className={`ad-container ${className}`}>
       <ins
         className="adsbygoogle"
         style={{ display: 'block' }}
-        data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" // Replace with your AdSense publisher ID
+        data-ad-client={publisherId}
         data-ad-slot={slot}
         data-ad-format={format}
         data-full-width-responsive={responsive.toString()}
