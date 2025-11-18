@@ -62,16 +62,16 @@ export function SEO() {
       // These tags help AI assistants and search engines understand and present our content
       setMetaTag('meta[name="ai:content_type"]', 'name', 'ai:content_type', 'calculator_tool');
       setMetaTag('meta[name="ai:primary_action"]', 'name', 'ai:primary_action', 'calculate');
-      setMetaTag('meta[name="ai:tool_category"]', 'name', 'ai:tool_category', getToolCategory(pathname));
-      setMetaTag('meta[name="ai:user_intent"]', 'name', 'ai:user_intent', getUserIntent(pathname));
+      setMetaTag('meta[name="ai:tool_category"]', 'name', 'ai:tool_category', getToolCategory(location.pathname));
+      setMetaTag('meta[name="ai:user_intent"]', 'name', 'ai:user_intent', getUserIntent(location.pathname));
 
       // Semantic understanding for AI
-      setMetaTag('meta[property="article:section"]', 'property', 'article:section', getToolCategory(pathname));
+      setMetaTag('meta[property="article:section"]', 'property', 'article:section', getToolCategory(location.pathname));
       setMetaTag('meta[property="article:tag"]', 'property', 'article:tag', keywords);
 
       // AI Assistant integration hints
-      setMetaTag('meta[name="ai:suggested_queries"]', 'name', 'ai:suggested_queries', getSuggestedQueries(pathname));
-      setMetaTag('meta[name="ai:tool_features"]', 'name', 'ai:tool_features', getToolFeatures(pathname));
+      setMetaTag('meta[name="ai:suggested_queries"]', 'name', 'ai:suggested_queries', getSuggestedQueries(location.pathname));
+      setMetaTag('meta[name="ai:tool_features"]', 'name', 'ai:tool_features', getToolFeatures(location.pathname));
 
       // Open Graph tags
       const ogTags = [
