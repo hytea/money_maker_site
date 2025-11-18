@@ -167,3 +167,11 @@ export const homePage = {
   metaDescription: 'Free online calculators and converters. Calculate tips, loans, BMI, pregnancy due dates, discounts, age, and more. Fast, simple, always free.',
   keywords: ['calculator', 'online calculator', 'free calculator', 'conversion tool', 'online tools']
 };
+
+// About page configuration
+export const aboutPage = {
+  path: '/about',
+  title: 'About QuickCalc Tools - Free Online Calculator Tools',
+  metaDescription: 'Learn about QuickCalc Tools, our mission to provide free, easy-to-use online calculators for everyone. No signup required, completely free forever.',
+  keywords: ['about quickcalc', 'free calculators', 'online tools', 'calculator website']
+};

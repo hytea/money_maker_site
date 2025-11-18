@@ -1,4 +1,27 @@
+# robots.txt for QuickCalc Tools
+# Allow all crawlers to access all pages
+
 User-agent: *
 Allow: /
 
+# Disallow analytics dashboard (internal use only)
+Disallow: /analytics
+
+# Crawl delay for polite crawling
+Crawl-delay: 1
+
+# Sitemap location
 Sitemap: https://quickcalc.tools/sitemap.xml
+
+# Additional helpful directives for major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
