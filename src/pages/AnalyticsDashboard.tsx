@@ -57,7 +57,7 @@ export function AnalyticsDashboard() {
             </p>
             <Button
               onClick={() => window.open(FIREBASE_ANALYTICS_URL, '_blank')}
-              className="w-full sm:w-auto"
+              className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold shadow-md hover:shadow-lg"
             >
               Open Firebase Analytics
               <ExternalLink className="h-4 w-4 ml-2" />
@@ -86,8 +86,7 @@ export function AnalyticsDashboard() {
             </p>
             <Button
               onClick={() => window.open(GA4_URL, '_blank')}
-              variant="outline"
-              className="w-full sm:w-auto"
+              className="w-full sm:w-auto bg-white hover:bg-purple-50 text-purple-700 border-2 border-purple-300 hover:border-purple-400 font-semibold shadow-sm hover:shadow-md"
             >
               Open Google Analytics
               <ExternalLink className="h-4 w-4 ml-2" />
