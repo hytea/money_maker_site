@@ -4,7 +4,7 @@ import { auth } from '@/config/firebase';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { BarChart3, LogOut, Shield, User } from 'lucide-react';
+import { BarChart3, LogOut, Shield, User, BookOpen } from 'lucide-react';
 
 export function AdminConsole() {
   const { user } = useAuth();
@@ -22,6 +22,10 @@ export function AdminConsole() {
 
   const handleNavigateToAnalytics = () => {
     navigate('/admin/analytics');
+  };
+
+  const handleNavigateToArticles = () => {
+    navigate('/admin/articles');
   };
 
   return (
@@ -100,20 +104,23 @@ export function AdminConsole() {
           </CardContent>
         </Card>
 
-        {/* Placeholder for future admin tools */}
-        <Card className="opacity-50">
+        {/* Article Management */}
+        <Card
+          className="cursor-pointer hover:shadow-lg transition-shadow border-2 hover:border-primary-300"
+          onClick={handleNavigateToArticles}
+        >
           <CardHeader>
-            <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center mb-4">
-              <Shield className="h-6 w-6 text-gray-500" />
+            <div className="w-12 h-12 rounded-full bg-gradient-to-r from-green-500 to-blue-500 flex items-center justify-center mb-4">
+              <BookOpen className="h-6 w-6 text-white" />
             </div>
-            <CardTitle className="text-gray-500">Content Management</CardTitle>
-            <CardDescription className="text-gray-400">
-              Coming soon - Manage site content and settings
+            <CardTitle>Article Management</CardTitle>
+            <CardDescription>
+              Create SEO-optimized articles with trending topic suggestions and AI assistance
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button className="w-full" disabled>
-              Coming Soon
+            <Button className="w-full">
+              Manage Articles
             </Button>
           </CardContent>
         </Card>

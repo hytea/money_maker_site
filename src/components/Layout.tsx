@@ -37,6 +37,12 @@ export function Layout() {
                 All Tools
               </Link>
               <Link
+                to="/articles"
+                className="px-4 py-2 rounded-lg text-gray-700 hover:text-primary-700 hover:bg-primary-50 font-medium transition-all"
+              >
+                Articles
+              </Link>
+              <Link
                 to="/about"
                 className="px-4 py-2 rounded-lg text-gray-700 hover:text-primary-700 hover:bg-primary-50 font-medium transition-all"
               >
@@ -68,6 +74,13 @@ export function Layout() {
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   All Tools
+                </Link>
+                <Link
+                  to="/articles"
+                  className="px-4 py-3 rounded-lg text-gray-700 hover:text-primary-700 hover:bg-primary-50 font-medium transition-all"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Articles
                 </Link>
                 <Link
                   to="/about"
@@ -172,16 +185,16 @@ export function Layout() {
               </ul>
             </div>
             <div>
-              <h3 className="font-bold text-base mb-4 text-white">About</h3>
+              <h3 className="font-bold text-base mb-4 text-white">Resources</h3>
               <ul className="space-y-2.5 text-sm">
+                <li>
+                  <Link to="/articles" className="text-gray-400 hover:text-white transition-colors">Articles & Guides</Link>
+                </li>
                 <li>
                   <Link to="/about" className="text-gray-400 hover:text-white transition-colors">About Us</Link>
                 </li>
                 <li>
                   <span className="text-gray-400">Privacy Policy</span>
-                </li>
-                <li>
-                  <span className="text-gray-400">Terms of Service</span>
                 </li>
                 <li>
                   <span className="text-gray-400">Contact</span>

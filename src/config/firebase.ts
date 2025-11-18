@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getAnalytics, type Analytics } from 'firebase/analytics';
+import { getFirestore } from 'firebase/firestore';
 
 // Firebase configuration from environment variables
 const firebaseConfig = {
@@ -29,3 +30,6 @@ if (typeof window !== 'undefined') {
 }
 
 export { analytics };
+
+// Initialize Firestore
+export const db = getFirestore(app);

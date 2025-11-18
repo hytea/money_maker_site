@@ -11,6 +11,11 @@ import { AnalyticsDashboard } from './pages/AnalyticsDashboard';
 import { SharedResultPage } from './pages/SharedResult';
 import { LoginPage } from './pages/Login';
 import { AdminConsole } from './pages/AdminConsole';
+import { ArticleList } from './pages/ArticleList';
+import { ArticlePage } from './pages/ArticlePage';
+import { ArticleManagement } from './pages/ArticleManagement';
+import { ArticleEditor } from './pages/ArticleEditor';
+import { TrendingTopicsDiscovery } from './pages/TrendingTopicsDiscovery';
 
 function App() {
   // Initialize analytics on app load
@@ -40,6 +45,10 @@ function App() {
               {/* About page */}
               <Route path="/about" element={<AboutPage />} />
 
+              {/* Article Pages */}
+              <Route path="/articles" element={<ArticleList />} />
+              <Route path="/articles/:slug" element={<ArticlePage />} />
+
               {/* Shared Result Page */}
               <Route path="/shared/:id" element={<SharedResultPage />} />
             </Route>
@@ -64,6 +73,38 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <AnalyticsDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="articles"
+                element={
+                  <ProtectedRoute>
+                    <ArticleManagement />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="articles/create"
+                element={
+                  <ProtectedRoute>
+                    <ArticleEditor />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="articles/edit/:id"
+                element={
+                  <ProtectedRoute>
+                    <ArticleEditor />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="articles/trending"
+                element={
+                  <ProtectedRoute>
+                    <TrendingTopicsDiscovery />
                   </ProtectedRoute>
                 }
               />
