@@ -6,6 +6,7 @@ import { tools, homePage } from './config/tools';
 import { ABTestingProvider } from './context/ABTestingContext';
 import { analytics } from './lib/analytics';
 import { AnalyticsDashboard } from './pages/AnalyticsDashboard';
+import { SharedResultPage } from './pages/SharedResult';
 
 function App() {
   // Initialize analytics on app load
@@ -36,6 +37,9 @@ function App() {
 
             {/* Analytics Dashboard */}
             <Route path="/analytics" element={<AnalyticsDashboard />} />
+
+            {/* Shared Result Page */}
+            <Route path="/shared/:id" element={<SharedResultPage />} />
           </Route>
         </Routes>
       </ABTestingProvider>
