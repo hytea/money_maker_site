@@ -4,6 +4,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { AdPlaceholder } from '@/components/AdSense';
+import { ResultInsights } from '@/components/ResultInsights';
+import { Download, Activity, Target } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine, Cell } from 'recharts';
+import { exportToPDF } from '@/lib/pdfExport';
 
 export function BMICalculator() {
   const [system, setSystem] = useState<'imperial' | 'metric'>('imperial');
@@ -20,7 +24,7 @@ export function BMICalculator() {
   const [calories, setCalories] = useState(0);
 
   useEffect(() => {
-    document.title = 'BMI Calculator & Calorie Calculator | QuickCalc Tools';
+    document.title = 'BMI Calculator & Calorie Calculator - Export PDF Report | QuickCalc Tools';
   }, []);
 
   useEffect(() => {
@@ -64,6 +68,143 @@ export function BMICalculator() {
       setCalories(0);
     }
   }, [weight, height, feet, inches, age, gender, activity, system]);
+
+  // Generate insights based on BMI and health data
+  const getInsights = () => {
+    if (bmi === 0) return [];
+
+    const insights = [];
+
+    // BMI category insights
+    if (category === 'Underweight') {
+      insights.push({
+        type: 'warning' as const,
+        title: 'Underweight Alert',
+        description: 'Your BMI indicates you are underweight. Consider consulting with a healthcare provider about healthy weight gain strategies and ensure adequate nutrition.',
+      });
+      insights.push({
+        type: 'tip' as const,
+        title: 'Weight Gain Strategy',
+        description: `Aim for ${calories + 500} calories per day with strength training to build healthy muscle mass. Focus on nutrient-dense foods.`,
+      });
+    } else if (category === 'Normal weight') {
+      insights.push({
+        type: 'success' as const,
+        title: 'Healthy BMI Range',
+        description: 'Congratulations! Your BMI is in the healthy range. Maintain your weight through balanced nutrition and regular physical activity.',
+      });
+      insights.push({
+        type: 'tip' as const,
+        title: 'Maintenance Tips',
+        description: `Stick to around ${calories} calories per day and exercise 150 minutes per week to maintain your healthy weight.`,
+      });
+    } else if (category === 'Overweight') {
+      insights.push({
+        type: 'warning' as const,
+        title: 'Overweight Category',
+        description: 'Your BMI indicates you are overweight. Small lifestyle changes can make a big difference. Consider consulting a healthcare provider.',
+      });
+      insights.push({
+        type: 'tip' as const,
+        title: 'Weight Loss Strategy',
+        description: `Aim for ${calories - 500} calories per day to lose about 1 pound per week. Combine with 30 minutes of daily exercise for best results.`,
+      });
+    } else if (category === 'Obese') {
+      insights.push({
+        type: 'warning' as const,
+        title: 'Health Risk Alert',
+        description: 'Your BMI indicates obesity, which can increase health risks. Please consult with a healthcare provider for personalized guidance.',
+      });
+      insights.push({
+        type: 'info' as const,
+        title: 'Start Small',
+        description: 'Set realistic goals. Even a 5-10% weight loss can significantly improve health markers. Focus on sustainable changes.',
+      });
+    }
+
+    // Activity level insights
+    if (parseFloat(activity) <= 1.2) {
+      insights.push({
+        type: 'tip' as const,
+        title: 'Increase Activity',
+        description: 'You have a sedentary lifestyle. Adding just 30 minutes of daily walking could burn an extra 150-200 calories and improve health.',
+      });
+    } else if (parseFloat(activity) >= 1.725) {
+      insights.push({
+        type: 'success' as const,
+        title: 'Active Lifestyle',
+        description: 'Great job staying active! Make sure you are eating enough to fuel your workouts and recovery.',
+      });
+    }
+
+    // Age-specific insights
+    const ageNum = parseFloat(age) || 25;
+    if (ageNum >= 40) {
+      insights.push({
+        type: 'info' as const,
+        title: 'Age Considerations',
+        description: 'Metabolism naturally slows with age. Include strength training 2-3 times per week to preserve muscle mass and metabolism.',
+      });
+    }
+
+    return insights;
+  };
+
+  const handleExportPDF = async () => {
+    await exportToPDF({
+      fileName: `bmi-calculator-report-${new Date().toISOString().split('T')[0]}.pdf`,
+      title: 'BMI & Calorie Calculator Report',
+      elementId: 'bmi-report',
+    });
+  };
+
+  // Calculate weight ranges for different BMI categories
+  const getWeightRanges = () => {
+    let heightM = 0;
+    if (system === 'imperial') {
+      const totalInches = (parseFloat(feet) || 0) * 12 + (parseFloat(inches) || 0);
+      heightM = (totalInches * 2.54) / 100;
+    } else {
+      heightM = (parseFloat(height) || 0) / 100;
+    }
+
+    if (heightM === 0) return [];
+
+    const ranges = [
+      { category: 'Underweight', minBMI: 16, maxBMI: 18.5, color: '#fbbf24' },
+      { category: 'Normal', minBMI: 18.5, maxBMI: 25, color: '#10b981' },
+      { category: 'Overweight', minBMI: 25, maxBMI: 30, color: '#f97316' },
+      { category: 'Obese', minBMI: 30, maxBMI: 35, color: '#ef4444' },
+    ];
+
+    return ranges.map(range => {
+      const minWeight = range.minBMI * heightM * heightM;
+      const maxWeight = range.maxBMI * heightM * heightM;
+      const minWeightDisplay = system === 'imperial' ? minWeight * 2.20462 : minWeight;
+      const maxWeightDisplay = system === 'imperial' ? maxWeight * 2.20462 : maxWeight;
+
+      return {
+        ...range,
+        minWeight: minWeightDisplay,
+        maxWeight: maxWeightDisplay,
+      };
+    });
+  };
+
+  // Generate calorie goals chart data
+  const getCalorieGoals = () => {
+    if (calories === 0) return [];
+
+    return [
+      { goal: 'Lose 2 lbs/week', calories: calories - 1000, color: '#ef4444' },
+      { goal: 'Lose 1 lb/week', calories: calories - 500, color: '#f97316' },
+      { goal: 'Maintain', calories: calories, color: '#10b981' },
+      { goal: 'Gain 1 lb/week', calories: calories + 500, color: '#3b82f6' },
+      { goal: 'Gain 2 lbs/week', calories: calories + 1000, color: '#8b5cf6' },
+    ];
+  };
+
+  const hasResults = bmi > 0;
 
   return (
     <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6 md:py-8">
@@ -275,6 +416,192 @@ export function BMICalculator() {
           </Card>
         </div>
       </div>
+
+      {/* Comprehensive Results Section with Charts and Insights */}
+      {hasResults && (
+        <div id="bmi-report" className="mt-8 md:mt-12 space-y-6">
+          {/* Export PDF Button */}
+          <div className="flex justify-end">
+            <Button
+              onClick={handleExportPDF}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Export PDF Report
+            </Button>
+          </div>
+
+          {/* BMI Visualization */}
+          <Card className="border-2">
+            <CardHeader className="bg-gradient-to-br from-red-50/50 to-white">
+              <CardTitle className="flex items-center gap-2">
+                <Activity className="h-5 w-5 text-red-600" />
+                Your BMI Analysis
+              </CardTitle>
+              <CardDescription>
+                Visual breakdown of your Body Mass Index and health metrics
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6">
+              {/* BMI Range Chart */}
+              <div className="mb-8">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">
+                  BMI Category Ranges (at your height)
+                </h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart
+                    data={getWeightRanges()}
+                    layout="vertical"
+                    margin={{ top: 5, right: 30, left: 100, bottom: 5 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis
+                      type="number"
+                      label={{ value: `Weight (${system === 'imperial' ? 'lbs' : 'kg'})`, position: 'insideBottom', offset: -5 }}
+                    />
+                    <YAxis type="category" dataKey="category" />
+                    <Tooltip
+                      formatter={(value: number) =>
+                        `${value.toFixed(1)} ${system === 'imperial' ? 'lbs' : 'kg'}`
+                      }
+                    />
+                    <Legend />
+                    <Bar dataKey="minWeight" stackId="a" fill="#e5e7eb" name="Min Weight" />
+                    <Bar
+                      dataKey={(data: any) => data.maxWeight - data.minWeight}
+                      stackId="a"
+                      name="Range"
+                    >
+                      {getWeightRanges().map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Bar>
+                    <ReferenceLine
+                      x={parseFloat(weight) || 0}
+                      stroke="#000"
+                      strokeWidth={2}
+                      label={{ value: 'You', position: 'top' }}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* Calorie Goals Chart */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">
+                  Daily Calorie Goals for Different Objectives
+                </h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={getCalorieGoals()}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="goal" angle={-15} textAnchor="end" height={80} />
+                    <YAxis
+                      label={{ value: 'Calories per Day', angle: -90, position: 'insideLeft' }}
+                    />
+                    <Tooltip />
+                    <Bar dataKey="calories" name="Daily Calories">
+                      {getCalorieGoals().map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Personalized Insights */}
+          <ResultInsights insights={getInsights()} title="Personalized Health Insights" />
+
+          {/* Detailed Health Metrics */}
+          <Card className="border-2">
+            <CardHeader className="bg-gradient-to-br from-green-50/50 to-white">
+              <CardTitle className="flex items-center gap-2">
+                <Target className="h-5 w-5 text-green-600" />
+                Detailed Health Metrics
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-6">
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-gray-900 mb-3">Your Stats</h4>
+                  <div className="flex justify-between py-2 border-b border-gray-200">
+                    <span className="text-gray-600">Height</span>
+                    <span className="font-semibold">
+                      {system === 'imperial'
+                        ? `${feet}' ${inches}"`
+                        : `${height} cm`}
+                    </span>
+                  </div>
+                  <div className="flex justify-between py-2 border-b border-gray-200">
+                    <span className="text-gray-600">Weight</span>
+                    <span className="font-semibold">
+                      {weight} {system === 'imperial' ? 'lbs' : 'kg'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between py-2 border-b border-gray-200">
+                    <span className="text-gray-600">Age</span>
+                    <span className="font-semibold">{age || 'N/A'}</span>
+                  </div>
+                  <div className="flex justify-between py-2 border-b border-gray-200">
+                    <span className="text-gray-600">Gender</span>
+                    <span className="font-semibold capitalize">{gender}</span>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-gray-900 mb-3">BMI Results</h4>
+                  <div className="flex justify-between py-2 border-b border-gray-200">
+                    <span className="text-gray-600">BMI Score</span>
+                    <span className="font-semibold text-red-600 text-lg">
+                      {bmi.toFixed(1)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between py-2 border-b border-gray-200">
+                    <span className="text-gray-600">Category</span>
+                    <span className="font-semibold">{category}</span>
+                  </div>
+                  <div className="pt-2">
+                    <div className="bg-gradient-to-r from-yellow-400 via-green-400 via-orange-400 to-red-400 h-4 rounded-full relative">
+                      <div
+                        className="absolute top-0 w-1 h-6 bg-black -mt-1"
+                        style={{
+                          left: `${Math.min(Math.max(((bmi - 15) / 25) * 100, 0), 100)}%`,
+                        }}
+                      />
+                    </div>
+                    <div className="flex justify-between text-xs text-gray-600 mt-1">
+                      <span>15</span>
+                      <span>40</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-gray-900 mb-3">Calorie Needs</h4>
+                  <div className="flex justify-between py-2 border-b border-gray-200">
+                    <span className="text-gray-600">Maintain Weight</span>
+                    <span className="font-semibold text-green-600">
+                      {calories} cal
+                    </span>
+                  </div>
+                  <div className="flex justify-between py-2 border-b border-gray-200">
+                    <span className="text-gray-600">Lose 1 lb/week</span>
+                    <span className="font-semibold">{calories - 500} cal</span>
+                  </div>
+                  <div className="flex justify-between py-2 border-b border-gray-200">
+                    <span className="text-gray-600">Gain 1 lb/week</span>
+                    <span className="font-semibold">{calories + 500} cal</span>
+                  </div>
+                  <div className="pt-2 text-xs text-gray-600">
+                    Based on {activity === '1.2' ? 'sedentary' : activity === '1.375' ? 'light' : activity === '1.55' ? 'moderate' : activity === '1.725' ? 'very active' : 'super active'} activity level
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
       <div className="mt-8 md:mt-12 prose max-w-none">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Understanding BMI</h2>
