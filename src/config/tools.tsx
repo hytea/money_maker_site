@@ -74,9 +74,9 @@ export const tools: Tool[] = [
     icon: Calculator,
     color: 'text-blue-600',
     bgColor: 'bg-blue-50',
-    title: 'Loan Calculator - Calculate Monthly Payments | QuickCalc Tools',
-    metaDescription: 'Free loan calculator for mortgages, auto loans, and personal loans. Calculate monthly payments, total interest, and amortization.',
-    keywords: ['loan calculator', 'mortgage calculator', 'car loan', 'monthly payment calculator', 'interest calculator'],
+    title: 'Loan Calculator - Calculate Monthly Payments & Export PDF Report | QuickCalc Tools',
+    metaDescription: 'Free loan calculator with visual charts and PDF reports. Calculate monthly payments, total interest, amortization schedule. Get personalized insights and export detailed reports for mortgages, auto loans, and personal loans.',
+    keywords: ['loan calculator', 'mortgage calculator', 'car loan', 'monthly payment calculator', 'interest calculator', 'loan calculator pdf', 'amortization chart'],
     searchVolume: 'high'
   },
   {
@@ -100,9 +100,9 @@ export const tools: Tool[] = [
     icon: Heart,
     color: 'text-red-600',
     bgColor: 'bg-red-50',
-    title: 'BMI Calculator & Calorie Calculator | QuickCalc Tools',
-    metaDescription: 'Free BMI calculator and calorie calculator. Calculate your Body Mass Index, ideal weight, and daily calorie needs. Imperial and metric units.',
-    keywords: ['bmi calculator', 'body mass index', 'calorie calculator', 'weight calculator', 'healthy weight'],
+    title: 'BMI Calculator & Calorie Calculator - Export PDF Health Report | QuickCalc Tools',
+    metaDescription: 'Free BMI calculator with visual charts and PDF health reports. Calculate Body Mass Index, ideal weight, daily calorie needs with personalized insights. Export detailed health reports. Imperial and metric units.',
+    keywords: ['bmi calculator', 'body mass index', 'calorie calculator', 'weight calculator', 'healthy weight', 'bmi chart', 'health report pdf'],
     searchVolume: 'high'
   },
   {
