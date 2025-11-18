@@ -37,12 +37,6 @@ export function Layout() {
                 All Tools
               </Link>
               <Link
-                to="/analytics"
-                className="px-4 py-2 rounded-lg text-gray-700 hover:text-primary-700 hover:bg-primary-50 font-medium transition-all"
-              >
-                Analytics
-              </Link>
-              <Link
                 to="/about"
                 className="px-4 py-2 rounded-lg text-gray-700 hover:text-primary-700 hover:bg-primary-50 font-medium transition-all"
               >

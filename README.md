@@ -95,6 +95,14 @@ This project uses environment variables for configuring third-party services lik
    # Google AdSense (optional, for monetization)
    VITE_ADSENSE_PUBLISHER_ID=ca-pub-YOUR-PUBLISHER-ID
 
+   # Firebase (required for admin authentication)
+   VITE_FIREBASE_API_KEY=your-api-key-here
+   VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+   VITE_FIREBASE_PROJECT_ID=your-project-id
+   VITE_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
+   VITE_FIREBASE_MESSAGING_SENDER_ID=123456789012
+   VITE_FIREBASE_APP_ID=1:123456789012:web:abcdef123456
+
    # OpenRouter AI (optional, for AI-powered features)
    VITE_OPENROUTER_API_KEY=sk-or-v1-YOUR-API-KEY
    ```
@@ -102,6 +110,7 @@ This project uses environment variables for configuring third-party services lik
 3. **Where to get these values**:
    - **Google Analytics**: Get your measurement ID from [Google Analytics](https://analytics.google.com)
    - **AdSense**: Apply and get your publisher ID from [Google AdSense](https://www.google.com/adsense)
+   - **Firebase**: Follow the Firebase setup instructions below to get your config values
    - **OpenRouter**: Get your API key from [OpenRouter](https://openrouter.ai/keys) - supports free AI models
 
 ### What happens if I don't set them?
@@ -119,6 +128,65 @@ This project includes a plugin-based AI integration system. See [AI_INTEGRATION.
 - Adding new AI providers (OpenAI, Anthropic, etc.)
 - Customizing AI behavior
 - API reference
+
+## Firebase Admin Authentication Setup
+
+The admin console and analytics dashboard are protected by Firebase Authentication using Google Sign-In.
+
+### Step 1: Create a Firebase Project
+
+1. Go to [Firebase Console](https://console.firebase.google.com)
+2. Click "Add project" and follow the setup wizard
+3. Once created, click on your project
+
+### Step 2: Enable Google Authentication
+
+1. In the Firebase Console, go to **Build > Authentication**
+2. Click "Get started"
+3. Click on the **Sign-in method** tab
+4. Click on **Google** in the providers list
+5. Toggle **Enable** to ON
+6. Add a support email address
+7. Click **Save**
+
+### Step 3: Register Your Web App
+
+1. In the Firebase Console, go to **Project settings** (gear icon)
+2. Scroll down to "Your apps" section
+3. Click the **Web** icon (`</>`)
+4. Register your app with a nickname (e.g., "QuickCalc Tools")
+5. Copy the Firebase configuration object
+
+### Step 4: Add Firebase Config to Your .env File
+
+Add the Firebase configuration values to your `.env` or `.env.local` file:
+
+```bash
+VITE_FIREBASE_API_KEY=your-api-key-here
+VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your-project-id
+VITE_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=123456789012
+VITE_FIREBASE_APP_ID=1:123456789012:web:abcdef123456
+```
+
+### Step 5: Configure Authorized Domains
+
+1. In Firebase Console, go to **Build > Authentication > Settings**
+2. Click on the **Authorized domains** tab
+3. Add your production domain (e.g., `quickcalc.tools`)
+4. `localhost` is already authorized for development
+
+### Accessing the Admin Console
+
+Once Firebase is configured:
+
+1. Visit `/login` on your website
+2. Click "Sign in with Google"
+3. After successful login, you'll be redirected to `/admin`
+4. From there, you can access the Analytics Dashboard at `/admin/analytics`
+
+**Note**: The public analytics page at `/analytics` has been removed. Analytics are now only accessible through the admin console after authentication.
 
 ## Adding New Calculators/Tools
 

@@ -4,9 +4,13 @@ import { Layout } from './components/Layout';
 import { SEO } from './components/SEO';
 import { tools, homePage } from './config/tools';
 import { ABTestingProvider } from './context/ABTestingContext';
+import { AuthProvider } from './context/AuthContext';
+import { ProtectedRoute } from './components/ProtectedRoute';
 import { analytics } from './lib/analytics';
 import { AnalyticsDashboard } from './pages/AnalyticsDashboard';
 import { SharedResultPage } from './pages/SharedResult';
+import { LoginPage } from './pages/Login';
+import { AdminConsole } from './pages/AdminConsole';
 
 function App() {
   // Initialize analytics on app load
@@ -16,33 +20,57 @@ function App() {
 
   return (
     <BrowserRouter>
-      <ABTestingProvider>
-        <SEO />
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            {/* Home page */}
-            <Route index element={<homePage.component />} />
+      <AuthProvider>
+        <ABTestingProvider>
+          <SEO />
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              {/* Home page */}
+              <Route index element={<homePage.component />} />
 
-            {/* Dynamically generate routes from tools config */}
-            {tools.map((tool) => (
+              {/* Dynamically generate routes from tools config */}
+              {tools.map((tool) => (
+                <Route
+                  key={tool.path}
+                  path={tool.path}
+                  element={<tool.component />}
+                />
+              ))}
+
+              {/* About page */}
+              <Route path="/about" element={<AboutPage />} />
+
+              {/* Shared Result Page */}
+              <Route path="/shared/:id" element={<SharedResultPage />} />
+            </Route>
+
+            {/* Login Page - Outside of Layout */}
+            <Route path="/login" element={<Layout />}>
+              <Route index element={<LoginPage />} />
+            </Route>
+
+            {/* Admin Routes - Protected */}
+            <Route path="/admin" element={<Layout />}>
               <Route
-                key={tool.path}
-                path={tool.path}
-                element={<tool.component />}
+                index
+                element={
+                  <ProtectedRoute>
+                    <AdminConsole />
+                  </ProtectedRoute>
+                }
               />
-            ))}
-
-            {/* About page */}
-            <Route path="/about" element={<AboutPage />} />
-
-            {/* Analytics Dashboard */}
-            <Route path="/analytics" element={<AnalyticsDashboard />} />
-
-            {/* Shared Result Page */}
-            <Route path="/shared/:id" element={<SharedResultPage />} />
-          </Route>
-        </Routes>
-      </ABTestingProvider>
+              <Route
+                path="analytics"
+                element={
+                  <ProtectedRoute>
+                    <AnalyticsDashboard />
+                  </ProtectedRoute>
+                }
+              />
+            </Route>
+          </Routes>
+        </ABTestingProvider>
+      </AuthProvider>
     </BrowserRouter>
   );
 }
