@@ -63,19 +63,48 @@ npm run preview
    - Connect your GitHub repository
    - Netlify will auto-detect the build settings from `netlify.toml`
 
-2. **Configure Analytics & Ads**:
+2. **Configure Analytics & Ads** (optional):
    - Get a Google Analytics tracking ID from https://analytics.google.com
    - Apply for Google AdSense at https://www.google.com/adsense
-   - Uncomment and update the tracking codes in `index.html`
-   - Update the AdSense publisher ID in `src/components/AdSense.tsx`
+   - Add environment variables in Netlify:
+     - Go to Site settings > Environment variables
+     - Add `VITE_GA_MEASUREMENT_ID` with your Google Analytics ID
+     - Add `VITE_ADSENSE_PUBLISHER_ID` with your AdSense publisher ID
 
 3. **Custom Domain** (optional):
    - Go to Site settings > Domain management
    - Add your custom domain
 
-### Environment Variables
+## Environment Variables
 
-No environment variables required! Everything works out of the box.
+This project uses environment variables for configuring third-party services like Google Analytics and AdSense.
+
+### Quick Setup
+
+1. **Copy the example file**:
+   ```bash
+   cp .env.example .env.local
+   ```
+
+2. **Add your credentials** to `.env.local`:
+   ```bash
+   # Google Analytics (optional but recommended)
+   VITE_GA_MEASUREMENT_ID=G-YOUR-MEASUREMENT-ID
+
+   # Google AdSense (optional, for monetization)
+   VITE_ADSENSE_PUBLISHER_ID=ca-pub-YOUR-PUBLISHER-ID
+   ```
+
+3. **Where to get these values**:
+   - **Google Analytics**: Get your measurement ID from [Google Analytics](https://analytics.google.com)
+   - **AdSense**: Apply and get your publisher ID from [Google AdSense](https://www.google.com/adsense)
+
+### What happens if I don't set them?
+
+- **No Google Analytics ID**: Analytics will run in local-only mode (data stored in browser localStorage)
+- **No AdSense ID**: Ad placeholders will be displayed instead of real ads
+
+All features work without these variables - they're only needed for production analytics and monetization!
 
 ## Adding New Calculators/Tools
 
