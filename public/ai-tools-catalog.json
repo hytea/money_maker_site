@@ -1,0 +1,272 @@
+{
+  "$schema": "https://schema.org/WebApplication",
+  "site": {
+    "name": "QuickCalc Tools",
+    "url": "https://quickcalc.tools",
+    "description": "Free online calculators and converters for everyday use. No signup required, completely free forever.",
+    "provider": {
+      "@type": "Organization",
+      "name": "QuickCalc Tools",
+      "url": "https://quickcalc.tools"
+    },
+    "accessMode": ["textual", "visual"],
+    "accessModeSufficient": ["textual", "visual"],
+    "isAccessibleForFree": true,
+    "inLanguage": "en-US",
+    "audience": "general public"
+  },
+  "tools": [
+    {
+      "@type": "WebApplication",
+      "name": "Tip Calculator",
+      "url": "https://quickcalc.tools/tip-calculator",
+      "description": "Calculate tips and split bills easily. Free tip calculator for restaurants with customizable percentages.",
+      "category": "finance",
+      "subcategory": "dining",
+      "features": [
+        "instant_calculation",
+        "bill_splitting",
+        "customizable_tip_percentage",
+        "per_person_cost"
+      ],
+      "userIntents": [
+        "calculate_tip",
+        "split_bill",
+        "dining_expenses"
+      ],
+      "suggestedQueries": [
+        "how much to tip",
+        "calculate 20% tip",
+        "split restaurant bill",
+        "tip calculator"
+      ],
+      "keywords": ["tip calculator", "restaurant tip", "split bill", "gratuity calculator", "tipping guide"],
+      "searchVolume": "high",
+      "isAccessibleForFree": true,
+      "requiresSignup": false
+    },
+    {
+      "@type": "WebApplication",
+      "name": "Loan Calculator",
+      "url": "https://quickcalc.tools/loan-calculator",
+      "description": "Calculate monthly loan payments, total interest, and view amortization schedules. Export detailed PDF reports.",
+      "category": "finance",
+      "subcategory": "loans",
+      "features": [
+        "monthly_payment_calculation",
+        "amortization_schedule",
+        "visual_charts",
+        "pdf_export",
+        "total_interest"
+      ],
+      "userIntents": [
+        "calculate_payment",
+        "plan_loan",
+        "financial_planning",
+        "mortgage_planning"
+      ],
+      "suggestedQueries": [
+        "calculate monthly payment",
+        "loan interest calculator",
+        "mortgage calculator",
+        "car loan payment"
+      ],
+      "keywords": ["loan calculator", "mortgage calculator", "car loan", "monthly payment calculator", "interest calculator"],
+      "searchVolume": "high",
+      "isAccessibleForFree": true,
+      "requiresSignup": false
+    },
+    {
+      "@type": "WebApplication",
+      "name": "BMI Calculator",
+      "url": "https://quickcalc.tools/bmi-calculator",
+      "description": "Calculate Body Mass Index (BMI), ideal weight, and daily calorie needs. Get personalized health insights and export PDF reports.",
+      "category": "health",
+      "subcategory": "fitness",
+      "features": [
+        "bmi_calculation",
+        "calorie_calculator",
+        "health_insights",
+        "pdf_export",
+        "ai_health_recommendations",
+        "imperial_metric_units"
+      ],
+      "userIntents": [
+        "check_health",
+        "calculate_bmi",
+        "fitness_tracking",
+        "weight_management"
+      ],
+      "suggestedQueries": [
+        "calculate BMI",
+        "healthy weight range",
+        "body mass index calculator",
+        "am I overweight"
+      ],
+      "keywords": ["bmi calculator", "body mass index", "calorie calculator", "weight calculator", "healthy weight"],
+      "searchVolume": "high",
+      "isAccessibleForFree": true,
+      "requiresSignup": false
+    },
+    {
+      "@type": "WebApplication",
+      "name": "Pregnancy Calculator",
+      "url": "https://quickcalc.tools/pregnancy-calculator",
+      "description": "Calculate your pregnancy due date, current week, and trimester. Track your pregnancy timeline based on last menstrual period.",
+      "category": "health",
+      "subcategory": "pregnancy",
+      "features": [
+        "due_date_calculation",
+        "trimester_info",
+        "pregnancy_timeline",
+        "week_by_week_tracking"
+      ],
+      "userIntents": [
+        "calculate_due_date",
+        "pregnancy_planning",
+        "track_pregnancy",
+        "health_monitoring"
+      ],
+      "suggestedQueries": [
+        "when is my due date",
+        "pregnancy week calculator",
+        "how many weeks pregnant",
+        "pregnancy due date"
+      ],
+      "keywords": ["pregnancy calculator", "due date calculator", "pregnancy week calculator", "trimester calculator"],
+      "searchVolume": "high",
+      "isAccessibleForFree": true,
+      "requiresSignup": false
+    },
+    {
+      "@type": "WebApplication",
+      "name": "Discount Calculator",
+      "url": "https://quickcalc.tools/discount-calculator",
+      "description": "Calculate sale prices, discounts, and savings. Find the final price after percentage off discounts.",
+      "category": "shopping",
+      "subcategory": "savings",
+      "features": [
+        "percentage_off_calculation",
+        "final_price",
+        "savings_amount",
+        "instant_results"
+      ],
+      "userIntents": [
+        "calculate_savings",
+        "shopping",
+        "price_comparison",
+        "discount_planning"
+      ],
+      "suggestedQueries": [
+        "calculate discount",
+        "sale price calculator",
+        "percentage off",
+        "how much do I save"
+      ],
+      "keywords": ["discount calculator", "sale calculator", "percentage off", "savings calculator", "price calculator"],
+      "searchVolume": "high",
+      "isAccessibleForFree": true,
+      "requiresSignup": false
+    },
+    {
+      "@type": "WebApplication",
+      "name": "Age Calculator",
+      "url": "https://quickcalc.tools/age-calculator",
+      "description": "Calculate your exact age in years, months, and days. Find days until your next birthday and age from date of birth.",
+      "category": "utility",
+      "subcategory": "date_calculation",
+      "features": [
+        "exact_age_calculation",
+        "years_months_days",
+        "next_birthday_countdown",
+        "age_in_various_units"
+      ],
+      "userIntents": [
+        "calculate_age",
+        "date_calculation",
+        "birthday_tracking",
+        "personal_information"
+      ],
+      "suggestedQueries": [
+        "how old am I",
+        "calculate exact age",
+        "age in days",
+        "age calculator"
+      ],
+      "keywords": ["age calculator", "calculate age", "how old am i", "age from date of birth", "birthday calculator"],
+      "searchVolume": "medium",
+      "isAccessibleForFree": true,
+      "requiresSignup": false
+    },
+    {
+      "@type": "WebApplication",
+      "name": "Split Bill Calculator",
+      "url": "https://quickcalc.tools/split-bill-calculator",
+      "description": "Split bills and expenses evenly among friends. Calculate per-person amounts including tip and tax.",
+      "category": "finance",
+      "subcategory": "group_expenses",
+      "features": [
+        "even_split",
+        "tip_included",
+        "tax_included",
+        "per_person_cost"
+      ],
+      "userIntents": [
+        "split_expenses",
+        "group_dining",
+        "social_payments",
+        "cost_sharing"
+      ],
+      "suggestedQueries": [
+        "split bill evenly",
+        "divide costs among friends",
+        "per person amount",
+        "bill splitter"
+      ],
+      "keywords": ["split bill calculator", "bill splitter", "divide bill", "split expenses", "group bill calculator"],
+      "searchVolume": "medium",
+      "isAccessibleForFree": true,
+      "requiresSignup": false
+    },
+    {
+      "@type": "WebApplication",
+      "name": "Unit Converter",
+      "url": "https://quickcalc.tools/unit-converter",
+      "description": "Convert cooking measurements, weight, and distance units. Convert cups to ml, pounds to kg, miles to km, and more.",
+      "category": "conversion",
+      "subcategory": "measurement",
+      "features": [
+        "cooking_unit_conversion",
+        "weight_conversion",
+        "distance_conversion",
+        "metric_imperial_conversion",
+        "instant_conversion"
+      ],
+      "userIntents": [
+        "convert_units",
+        "cooking_measurements",
+        "recipe_conversion",
+        "measurement_conversion"
+      ],
+      "suggestedQueries": [
+        "cups to ml",
+        "pounds to kg",
+        "miles to km",
+        "unit converter",
+        "cooking conversion"
+      ],
+      "keywords": ["unit converter", "cooking conversion", "weight converter", "metric converter", "measurement converter"],
+      "searchVolume": "high",
+      "isAccessibleForFree": true,
+      "requiresSignup": false
+    }
+  ],
+  "metadata": {
+    "version": "1.0.0",
+    "lastUpdated": "2025-11-18",
+    "aiOptimized": true,
+    "dataFormat": "schema.org/WebApplication",
+    "purpose": "AI Search and Discovery Optimization",
+    "usage": "This catalog helps AI assistants discover and recommend QuickCalc tools to users"
+  }
+}

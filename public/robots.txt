@@ -25,3 +25,70 @@ Allow: /
 
 User-agent: Slurp
 Allow: /
+
+# AI Search Engine and Assistant Crawlers
+# These AI-powered tools help users discover our calculators
+
+# OpenAI GPT Crawler (ChatGPT, GPT search)
+User-agent: GPTBot
+Allow: /
+Crawl-delay: 1
+
+# Google Bard / Gemini
+User-agent: Google-Extended
+Allow: /
+
+# Anthropic Claude (web search, citations)
+User-agent: Claude-Web
+Allow: /
+Crawl-delay: 1
+
+User-agent: anthropic-ai
+Allow: /
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+
+# Common Crawl (used by many AI models for training)
+User-agent: CCBot
+Allow: /
+
+# Meta AI
+User-agent: FacebookBot
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+# Applebot (Apple Intelligence, Siri)
+User-agent: Applebot
+Allow: /
+Crawl-delay: 1
+
+# Cohere AI
+User-agent: cohere-ai
+Allow: /
+
+# AI2 Bot (Allen Institute for AI)
+User-agent: AI2Bot
+Allow: /
+
+# Diffbot (knowledge graph for AI)
+User-agent: Diffbot
+Allow: /
+
+# YouBot (You.com AI search)
+User-agent: YouBot
+Allow: /
+
+# Omgili bot (real-time content for AI)
+User-agent: omgili
+Allow: /
+
+# Additional AI research crawlers
+User-agent: Bytespider
+Allow: /
+
+User-agent: PetalBot
+Allow: /

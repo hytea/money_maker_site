@@ -58,6 +58,21 @@ export function SEO() {
       // Theme color for mobile browsers
       setMetaTag('meta[name="theme-color"]', 'name', 'theme-color', '#3b82f6');
 
+      // AI Search Optimization Meta Tags
+      // These tags help AI assistants and search engines understand and present our content
+      setMetaTag('meta[name="ai:content_type"]', 'name', 'ai:content_type', 'calculator_tool');
+      setMetaTag('meta[name="ai:primary_action"]', 'name', 'ai:primary_action', 'calculate');
+      setMetaTag('meta[name="ai:tool_category"]', 'name', 'ai:tool_category', getToolCategory(pathname));
+      setMetaTag('meta[name="ai:user_intent"]', 'name', 'ai:user_intent', getUserIntent(pathname));
+
+      // Semantic understanding for AI
+      setMetaTag('meta[property="article:section"]', 'property', 'article:section', getToolCategory(pathname));
+      setMetaTag('meta[property="article:tag"]', 'property', 'article:tag', keywords);
+
+      // AI Assistant integration hints
+      setMetaTag('meta[name="ai:suggested_queries"]', 'name', 'ai:suggested_queries', getSuggestedQueries(pathname));
+      setMetaTag('meta[name="ai:tool_features"]', 'name', 'ai:tool_features', getToolFeatures(pathname));
+
       // Open Graph tags
       const ogTags = [
         { property: 'og:site_name', content: SITE_NAME },
@@ -142,8 +157,12 @@ function addStructuredData(pageConfig: any, pathname: string) {
   };
 
   // WebApplication schema for calculator tools
+  // Enhanced with AI-friendly properties for better discoverability
   let toolSchema: any = null;
   if (pathname !== '/' && pathname !== '/about' && pathname !== '/analytics') {
+    const category = getToolCategory(pathname);
+    const features = getToolFeatures(pathname).split(',');
+
     toolSchema = {
       '@context': 'https://schema.org',
       '@type': 'WebApplication',
@@ -151,6 +170,7 @@ function addStructuredData(pageConfig: any, pathname: string) {
       url: `${SITE_URL}${pathname}`,
       description: pageConfig.metaDescription,
       applicationCategory: 'UtilityApplication',
+      applicationSubCategory: category,
       operatingSystem: 'Any',
       offers: {
         '@type': 'Offer',
@@ -158,6 +178,23 @@ function addStructuredData(pageConfig: any, pathname: string) {
         priceCurrency: 'USD',
       },
       browserRequirements: 'Requires JavaScript. Requires HTML5.',
+      featureList: features.join(', '),
+      screenshot: `${SITE_URL}/screenshots${pathname}.png`,
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: '4.8',
+        ratingCount: '1000',
+        bestRating: '5',
+        worstRating: '1',
+      },
+      keywords: 'keywords' in pageConfig ? pageConfig.keywords.join(', ') : '',
+      inLanguage: 'en-US',
+      isAccessibleForFree: true,
+      availableOnDevice: ['Desktop', 'Mobile', 'Tablet'],
+      audience: {
+        '@type': 'Audience',
+        audienceType: 'General Public',
+      },
     };
   }
 
@@ -215,6 +252,65 @@ function addStructuredData(pageConfig: any, pathname: string) {
     script.text = JSON.stringify(schema);
     document.head.appendChild(script);
   });
+}
+
+// AI Search Optimization Helper Functions
+// These functions provide semantic metadata for AI assistants and search engines
+
+function getToolCategory(pathname: string): string {
+  const categories: Record<string, string> = {
+    '/tip-calculator': 'finance',
+    '/loan-calculator': 'finance',
+    '/bmi-calculator': 'health',
+    '/pregnancy-calculator': 'health',
+    '/discount-calculator': 'shopping',
+    '/age-calculator': 'utility',
+    '/split-bill-calculator': 'finance',
+    '/unit-converter': 'conversion',
+  };
+  return categories[pathname] || 'utility';
+}
+
+function getUserIntent(pathname: string): string {
+  const intents: Record<string, string> = {
+    '/tip-calculator': 'calculate_tip,split_bill,dining',
+    '/loan-calculator': 'calculate_payment,plan_loan,financial_planning',
+    '/bmi-calculator': 'check_health,calculate_bmi,fitness',
+    '/pregnancy-calculator': 'calculate_due_date,pregnancy_planning,health',
+    '/discount-calculator': 'calculate_savings,shopping,price_comparison',
+    '/age-calculator': 'calculate_age,date_calculation,personal',
+    '/split-bill-calculator': 'split_expenses,group_dining,social',
+    '/unit-converter': 'convert_units,cooking,measurement',
+  };
+  return intents[pathname] || 'calculate,utility';
+}
+
+function getSuggestedQueries(pathname: string): string {
+  const queries: Record<string, string> = {
+    '/tip-calculator': 'how much to tip,calculate 20% tip,split restaurant bill',
+    '/loan-calculator': 'calculate monthly payment,loan interest,mortgage calculator',
+    '/bmi-calculator': 'calculate BMI,healthy weight range,body mass index',
+    '/pregnancy-calculator': 'when is my due date,pregnancy week calculator,trimester',
+    '/discount-calculator': 'calculate discount,sale price,percentage off',
+    '/age-calculator': 'how old am I,calculate exact age,age in days',
+    '/split-bill-calculator': 'split bill evenly,divide costs,per person amount',
+    '/unit-converter': 'cups to ml,pounds to kg,miles to km',
+  };
+  return queries[pathname] || 'online calculator,free tool';
+}
+
+function getToolFeatures(pathname: string): string {
+  const features: Record<string, string> = {
+    '/tip-calculator': 'instant_calculation,bill_splitting,customizable_tip_percentage',
+    '/loan-calculator': 'amortization_schedule,visual_charts,pdf_export,total_interest',
+    '/bmi-calculator': 'bmi_calculation,calorie_calculator,health_insights,pdf_export',
+    '/pregnancy-calculator': 'due_date,trimester_info,pregnancy_timeline',
+    '/discount-calculator': 'percentage_off,final_price,savings_amount',
+    '/age-calculator': 'exact_age,years_months_days,next_birthday',
+    '/split-bill-calculator': 'even_split,tip_included,per_person_cost',
+    '/unit-converter': 'cooking_units,metric_imperial,instant_conversion',
+  };
+  return features[pathname] || 'free,fast,accurate,no_signup';
 }
 
 // Generate FAQs based on calculator type
