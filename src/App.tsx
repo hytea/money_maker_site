@@ -1,30 +1,44 @@
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { SEO } from './components/SEO';
 import { tools, homePage } from './config/tools';
+import { ABTestingProvider } from './context/ABTestingContext';
+import { analytics } from './lib/analytics';
+import { AnalyticsDashboard } from './pages/AnalyticsDashboard';
 
 function App() {
+  // Initialize analytics on app load
+  useEffect(() => {
+    analytics.initialize();
+  }, []);
+
   return (
     <BrowserRouter>
-      <SEO />
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          {/* Home page */}
-          <Route index element={<homePage.component />} />
+      <ABTestingProvider>
+        <SEO />
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            {/* Home page */}
+            <Route index element={<homePage.component />} />
 
-          {/* Dynamically generate routes from tools config */}
-          {tools.map((tool) => (
-            <Route
-              key={tool.path}
-              path={tool.path}
-              element={<tool.component />}
-            />
-          ))}
+            {/* Dynamically generate routes from tools config */}
+            {tools.map((tool) => (
+              <Route
+                key={tool.path}
+                path={tool.path}
+                element={<tool.component />}
+              />
+            ))}
 
-          {/* About page */}
-          <Route path="/about" element={<AboutPage />} />
-        </Route>
-      </Routes>
+            {/* About page */}
+            <Route path="/about" element={<AboutPage />} />
+
+            {/* Analytics Dashboard */}
+            <Route path="/analytics" element={<AnalyticsDashboard />} />
+          </Route>
+        </Routes>
+      </ABTestingProvider>
     </BrowserRouter>
   );
 }
