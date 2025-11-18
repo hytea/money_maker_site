@@ -85,16 +85,16 @@ export function TipCalculator() {
       <div className="grid md:grid-cols-3 gap-4 md:gap-6">
         {/* Mobile Results Section - Shows at top on mobile */}
         <div className="md:hidden">
-          <Card className="border-2 border-primary-200 bg-gradient-to-br from-primary-50 via-white to-accent-50 shadow-md mb-4">
+          <Card variant="gradient" className="border-2 border-primary-200 shadow-md mb-4">
             <CardContent className="p-3">
               <div className="grid grid-cols-3 gap-2">
-                <div className="bg-white/80 backdrop-blur-sm rounded-lg p-2 border border-primary-200">
+                <div className="glass rounded-lg p-2 border border-white/20">
                   <p className="text-xs font-medium text-gray-600 mb-0.5">Tip</p>
-                  <p className="text-lg font-bold bg-gradient-to-r from-emerald-600 to-emerald-700 bg-clip-text text-transparent">
+                  <p className="text-lg font-bold gradient-text">
                     ${tipAmount.toFixed(2)}
                   </p>
                 </div>
-                <div className="bg-white/80 backdrop-blur-sm rounded-lg p-2 border border-primary-200">
+                <div className="glass rounded-lg p-2 border border-white/20">
                   <p className="text-xs font-medium text-gray-600 mb-0.5">Total</p>
                   <p className="text-lg font-bold text-gray-900">${totalAmount.toFixed(2)}</p>
                 </div>
