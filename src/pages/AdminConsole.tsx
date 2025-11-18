@@ -4,7 +4,7 @@ import { auth } from '@/config/firebase';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { BarChart3, LogOut, Shield, User } from 'lucide-react';
+import { BarChart3, LogOut, Shield, User, FlaskConical } from 'lucide-react';
 
 export function AdminConsole() {
   const { user } = useAuth();
@@ -22,6 +22,10 @@ export function AdminConsole() {
 
   const handleNavigateToAnalytics = () => {
     navigate('/admin/analytics');
+  };
+
+  const handleNavigateToABTests = () => {
+    navigate('/admin/ab-tests');
   };
 
   return (
@@ -96,6 +100,26 @@ export function AdminConsole() {
           <CardContent>
             <Button className="w-full">
               View Analytics
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card
+          className="cursor-pointer hover:shadow-lg transition-shadow border-2 hover:border-purple-300"
+          onClick={handleNavigateToABTests}
+        >
+          <CardHeader>
+            <div className="w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center mb-4">
+              <FlaskConical className="h-6 w-6 text-white" />
+            </div>
+            <CardTitle>AB Testing</CardTitle>
+            <CardDescription>
+              Manage AB tests with Firebase and monitor experiment performance
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">
+              Manage AB Tests
             </Button>
           </CardContent>
         </Card>

@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { SEO } from './components/SEO';
 import { tools, homePage } from './config/tools';
-import { ABTestingProvider } from './context/ABTestingContext';
+import { FirebaseABTestingProvider } from './context/FirebaseABTestingContext';
 import { AuthProvider } from './context/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { analytics } from './lib/analytics';
@@ -11,6 +11,7 @@ import { AnalyticsDashboard } from './pages/AnalyticsDashboard';
 import { SharedResultPage } from './pages/SharedResult';
 import { LoginPage } from './pages/Login';
 import { AdminConsole } from './pages/AdminConsole';
+import { ABTestAdmin } from './pages/ABTestAdmin';
 
 function App() {
   // Initialize analytics on app load
@@ -21,7 +22,7 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <ABTestingProvider>
+        <FirebaseABTestingProvider>
           <SEO />
           <Routes>
             <Route path="/" element={<Layout />}>
@@ -67,9 +68,17 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route
+                path="ab-tests"
+                element={
+                  <ProtectedRoute>
+                    <ABTestAdmin />
+                  </ProtectedRoute>
+                }
+              />
             </Route>
           </Routes>
-        </ABTestingProvider>
+        </FirebaseABTestingProvider>
       </AuthProvider>
     </BrowserRouter>
   );
