@@ -15,7 +15,9 @@ import {
   Apple,
   Dumbbell,
   Moon,
-  AlertCircle
+  AlertCircle,
+  ShieldAlert,
+  X
 } from 'lucide-react';
 
 interface Message {
@@ -25,6 +27,10 @@ interface Message {
 }
 
 const STORAGE_KEY = 'ai-health-coach-messages';
+const DISCLAIMER_ACCEPTED_KEY = 'ai-health-coach-disclaimer-accepted';
+const MAX_INPUT_LENGTH = 500;
+const RATE_LIMIT_WINDOW = 60000; // 1 minute
+const MAX_REQUESTS_PER_WINDOW = 10;
 
 const SYSTEM_PROMPT = `You are a knowledgeable and supportive health coach. You provide evidence-based advice on nutrition, fitness, wellness, and healthy lifestyle habits.
 
@@ -67,34 +73,57 @@ export function AIHealthCoach() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
+  const [rateLimitError, setRateLimitError] = useState<string | null>(null);
+  const [storageError, setStorageError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const requestTimestamps = useRef<number[]>([]);
   const { ask, isAvailable, error: aiError } = useAI({
     temperature: 0.8,
     maxTokens: 800,
   });
 
-  // Load messages from localStorage on mount
+  // Load messages from localStorage on mount and check disclaimer
   useEffect(() => {
     document.title = 'AI Health Coach - Free Personalized Health & Fitness Advice | QuickCalc Tools';
 
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      try {
+    // Check if disclaimer has been accepted
+    const disclaimerAccepted = localStorage.getItem(DISCLAIMER_ACCEPTED_KEY);
+    if (!disclaimerAccepted) {
+      setShowDisclaimer(true);
+    }
+
+    // Load stored messages
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
         const parsed = JSON.parse(stored);
         setMessages(parsed.map((msg: any) => ({
           ...msg,
           timestamp: new Date(msg.timestamp)
         })));
-      } catch (e) {
-        console.error('Failed to parse stored messages:', e);
       }
+    } catch (e) {
+      console.error('Failed to parse stored messages:', e);
+      setStorageError('Unable to load previous chat history');
     }
   }, []);
 
-  // Save messages to localStorage whenever they change
+  // Save messages to localStorage whenever they change (with error handling)
   useEffect(() => {
     if (messages.length > 0) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+        setStorageError(null);
+      } catch (e) {
+        // Handle quota exceeded error
+        if (e instanceof DOMException && (e.name === 'QuotaExceededError' || e.code === 22)) {
+          setStorageError('Chat history storage is full. Please export and clear your chat.');
+        } else {
+          setStorageError('Unable to save chat history');
+        }
+        console.error('Failed to save messages:', e);
+      }
     }
   }, [messages]);
 
@@ -103,9 +132,50 @@ export function AIHealthCoach() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isLoading]);
 
+  // Rate limiting check
+  const checkRateLimit = (): boolean => {
+    const now = Date.now();
+    const recentRequests = requestTimestamps.current.filter(
+      timestamp => now - timestamp < RATE_LIMIT_WINDOW
+    );
+    requestTimestamps.current = recentRequests;
+
+    if (recentRequests.length >= MAX_REQUESTS_PER_WINDOW) {
+      setRateLimitError(
+        `Please slow down. You can send up to ${MAX_REQUESTS_PER_WINDOW} messages per minute.`
+      );
+      return false;
+    }
+
+    setRateLimitError(null);
+    return true;
+  };
+
+  // Accept disclaimer handler
+  const handleAcceptDisclaimer = () => {
+    localStorage.setItem(DISCLAIMER_ACCEPTED_KEY, 'true');
+    setShowDisclaimer(false);
+  };
+
   const handleSend = async (customPrompt?: string) => {
     const prompt = customPrompt || inputValue.trim();
-    if (!prompt || !isAvailable) return;
+
+    // Input validation
+    if (!prompt) return;
+    if (!isAvailable) return;
+
+    if (prompt.length > MAX_INPUT_LENGTH) {
+      setRateLimitError(`Message is too long. Please keep it under ${MAX_INPUT_LENGTH} characters.`);
+      return;
+    }
+
+    // Rate limiting check
+    if (!checkRateLimit()) {
+      return;
+    }
+
+    // Record request timestamp
+    requestTimestamps.current.push(Date.now());
 
     const userMessage: Message = {
       role: 'user',
@@ -175,6 +245,90 @@ export function AIHealthCoach() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-white py-8 px-4">
+      {/* Medical Disclaimer Modal */}
+      {showDisclaimer && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <Card className="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <CardHeader className="border-b bg-red-50">
+              <div className="flex items-center gap-3">
+                <ShieldAlert className="w-8 h-8 text-red-600" />
+                <div>
+                  <CardTitle className="text-xl text-red-900">Important Medical Disclaimer</CardTitle>
+                  <CardDescription className="text-red-700">Please read carefully before using the AI Health Coach</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-6">
+              <div className="space-y-4 text-sm text-gray-700">
+                <div className="bg-amber-50 border-l-4 border-amber-500 p-4 rounded">
+                  <p className="font-semibold text-amber-900 mb-2">NOT A SUBSTITUTE FOR MEDICAL ADVICE</p>
+                  <p>This AI Health Coach is designed to provide general wellness information and educational content only. It is NOT a substitute for professional medical advice, diagnosis, or treatment.</p>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="font-semibold text-gray-900">Important Limitations:</h3>
+                  <ul className="list-disc ml-5 space-y-1">
+                    <li>The AI cannot diagnose medical conditions or prescribe medications</li>
+                    <li>The AI cannot provide emergency medical assistance</li>
+                    <li>The AI's advice should not replace consultation with qualified healthcare professionals</li>
+                    <li>The AI may make mistakes or provide incomplete information</li>
+                    <li>Individual health needs vary - what works for others may not work for you</li>
+                  </ul>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="font-semibold text-gray-900">You should consult a healthcare professional if you:</h3>
+                  <ul className="list-disc ml-5 space-y-1">
+                    <li>Have or suspect you have a medical condition</li>
+                    <li>Are experiencing symptoms that concern you</li>
+                    <li>Are pregnant, nursing, or planning to become pregnant</li>
+                    <li>Are taking medications or have chronic health conditions</li>
+                    <li>Are considering major changes to your diet or exercise routine</li>
+                  </ul>
+                </div>
+
+                <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                  <p className="font-semibold text-red-900 mb-2">EMERGENCY WARNING</p>
+                  <p>If you are experiencing a medical emergency, call emergency services (911 in the US) immediately. Do not use this AI tool for emergency situations.</p>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="font-semibold text-gray-900">By using this service, you acknowledge that:</h3>
+                  <ul className="list-disc ml-5 space-y-1">
+                    <li>You understand the limitations described above</li>
+                    <li>You will not rely solely on AI advice for health decisions</li>
+                    <li>You will consult qualified healthcare professionals for medical concerns</li>
+                    <li>You use this service at your own risk</li>
+                    <li>The service provider is not liable for any health outcomes</li>
+                  </ul>
+                </div>
+
+                <div className="pt-4 border-t">
+                  <p className="text-xs text-gray-600">This tool provides general wellness information based on AI-generated responses. Always verify important health information with qualified medical professionals.</p>
+                </div>
+              </div>
+
+              <div className="mt-6 flex gap-3 justify-end">
+                <Button
+                  variant="outline"
+                  onClick={() => window.history.back()}
+                  className="flex items-center gap-2"
+                >
+                  <X className="w-4 h-4" />
+                  I Do Not Accept
+                </Button>
+                <Button
+                  onClick={handleAcceptDisclaimer}
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                >
+                  I Understand and Accept
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
@@ -340,16 +494,40 @@ export function AIHealthCoach() {
                   <div ref={messagesEndRef} />
                 </div>
 
+                {/* Error Messages */}
+                {(rateLimitError || storageError) && (
+                  <div className="mb-4 space-y-2">
+                    {rateLimitError && (
+                      <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-700 flex items-start gap-2">
+                        <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                        <span>{rateLimitError}</span>
+                      </div>
+                    )}
+                    {storageError && (
+                      <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm text-amber-700 flex items-start gap-2">
+                        <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                        <span>{storageError}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 {/* Input Area */}
                 <div className="flex gap-2">
-                  <Input
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                    placeholder="Ask your health coach anything..."
-                    disabled={isLoading}
-                    className="flex-1 border-2 border-gray-200 focus:border-emerald-400"
-                  />
+                  <div className="flex-1">
+                    <Input
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      onKeyPress={handleKeyPress}
+                      placeholder="Ask your health coach anything..."
+                      disabled={isLoading}
+                      maxLength={MAX_INPUT_LENGTH}
+                      className="border-2 border-gray-200 focus:border-emerald-400"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      {inputValue.length}/{MAX_INPUT_LENGTH} characters
+                    </p>
+                  </div>
                   <Button
                     onClick={() => handleSend()}
                     disabled={!inputValue.trim() || isLoading}
