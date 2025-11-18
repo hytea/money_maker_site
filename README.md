@@ -5,11 +5,12 @@ A high-traffic, SEO-optimized calculator and converter website built with React,
 ## Features
 
 - **8 Popular Calculators**: Tip, Loan, Pregnancy, BMI, Discount, Age, Split Bill, and Unit Converter
+- **AI-Powered Insights**: Agentic AI integration with OpenRouter for personalized recommendations
 - **SEO Optimized**: Meta tags, Open Graph, Twitter Cards, sitemap, and robots.txt
 - **Ad-Ready**: Google AdSense integration points throughout
 - **Mobile Responsive**: Works perfectly on all devices
 - **Fast & Lightweight**: Built with Vite for optimal performance
-- **Easy to Extend**: Config-driven architecture for adding new tools
+- **Easy to Extend**: Config-driven architecture for adding new tools and AI providers
 
 ## Tech Stack
 
@@ -93,18 +94,31 @@ This project uses environment variables for configuring third-party services lik
 
    # Google AdSense (optional, for monetization)
    VITE_ADSENSE_PUBLISHER_ID=ca-pub-YOUR-PUBLISHER-ID
+
+   # OpenRouter AI (optional, for AI-powered features)
+   VITE_OPENROUTER_API_KEY=sk-or-v1-YOUR-API-KEY
    ```
 
 3. **Where to get these values**:
    - **Google Analytics**: Get your measurement ID from [Google Analytics](https://analytics.google.com)
    - **AdSense**: Apply and get your publisher ID from [Google AdSense](https://www.google.com/adsense)
+   - **OpenRouter**: Get your API key from [OpenRouter](https://openrouter.ai/keys) - supports free AI models
 
 ### What happens if I don't set them?
 
 - **No Google Analytics ID**: Analytics will run in local-only mode (data stored in browser localStorage)
 - **No AdSense ID**: Ad placeholders will be displayed instead of real ads
+- **No OpenRouter API Key**: AI-powered features will be hidden from the UI
 
-All features work without these variables - they're only needed for production analytics and monetization!
+All features work without these variables - they're only needed for production analytics, monetization, and AI features!
+
+### AI Integration
+
+This project includes a plugin-based AI integration system. See [AI_INTEGRATION.md](./AI_INTEGRATION.md) for detailed documentation on:
+- Using AI-powered features
+- Adding new AI providers (OpenAI, Anthropic, etc.)
+- Customizing AI behavior
+- API reference
 
 ## Adding New Calculators/Tools
 
