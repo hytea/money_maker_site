@@ -38,29 +38,27 @@ export function SplitBillCalculator() {
         <p className="text-base md:text-lg text-gray-600">Easily split bills and expenses with friends</p>
       </div>
 
-      {/* Mobile Results - Sticky at top */}
+      {/* Mobile Results - Compact summary */}
       {totalBill && parseFloat(totalBill) > 0 && (
-        <Card className="md:hidden bg-teal-50 border-teal-200 sticky top-20 z-10 shadow-lg mb-4">
-          <CardContent className="pt-4 space-y-3">
-            <div>
-              <p className="text-xs text-teal-700 mb-1">Each Person Pays</p>
-              <p className="text-3xl font-bold text-teal-900">${perPerson.toFixed(2)}</p>
-            </div>
-            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-teal-200">
+        <Card className="md:hidden bg-teal-50 border-teal-200 shadow-md mb-4">
+          <CardContent className="p-3">
+            <div className="grid grid-cols-3 gap-2 text-center">
               <div>
-                <p className="text-xs text-teal-700 mb-1">Tip Amount</p>
-                <p className="text-lg font-bold text-teal-900">${tipAmount.toFixed(2)}</p>
+                <p className="text-xs text-teal-700 mb-0.5">Per Person</p>
+                <p className="text-lg font-bold text-teal-900">${perPerson.toFixed(2)}</p>
               </div>
               <div>
-                <p className="text-xs text-teal-700 mb-1">Total with Tip</p>
-                <p className="text-lg font-bold text-teal-900">${totalWithTip.toFixed(2)}</p>
+                <p className="text-xs text-teal-700 mb-0.5">Tip</p>
+                <p className="text-sm font-bold text-teal-900">${tipAmount.toFixed(2)}</p>
+              </div>
+              <div>
+                <p className="text-xs text-teal-700 mb-0.5">Total</p>
+                <p className="text-sm font-bold text-teal-900">${totalWithTip.toFixed(2)}</p>
               </div>
             </div>
-            <div className="pt-2 border-t border-teal-200">
-              <p className="text-xs text-teal-700">
-                Splitting <strong>${totalWithTip.toFixed(2)}</strong> between <strong>{numPeople}</strong> {parseInt(numPeople) === 1 ? 'person' : 'people'}
-              </p>
-            </div>
+            <p className="text-xs text-teal-700 text-center mt-2">
+              Split {numPeople} {parseInt(numPeople) === 1 ? 'person' : 'people'}
+            </p>
           </CardContent>
         </Card>
       )}

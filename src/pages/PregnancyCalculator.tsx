@@ -56,34 +56,29 @@ export function PregnancyCalculator() {
         <p className="text-base md:text-lg text-gray-600">Calculate your pregnancy due date and timeline</p>
       </div>
 
-      {/* Mobile Results - Sticky at top */}
+      {/* Mobile Results - Compact summary */}
       {dueDate && (
-        <Card className="md:hidden bg-pink-50 border-pink-200 sticky top-20 z-10 shadow-lg mb-4">
-          <CardContent className="pt-4 space-y-3">
-            <div>
-              <p className="text-xs text-pink-700 mb-1">Due Date</p>
-              <p className="text-xl font-bold text-pink-900">
-                {dueDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-              </p>
-            </div>
-            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-pink-200">
+        <Card className="md:hidden bg-pink-50 border-pink-200 shadow-md mb-4">
+          <CardContent className="p-3">
+            <div className="grid grid-cols-3 gap-2 text-center">
               <div>
-                <p className="text-xs text-pink-700 mb-1">You are</p>
-                <p className="text-lg font-bold text-pink-900">
+                <p className="text-xs text-pink-700 mb-0.5">Due Date</p>
+                <p className="text-sm font-bold text-pink-900">
+                  {dueDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-pink-700 mb-0.5">You are</p>
+                <p className="text-sm font-bold text-pink-900">
                   {weeksPregnant}w {daysPregnant}d
                 </p>
               </div>
               <div>
-                <p className="text-xs text-pink-700 mb-1">Trimester</p>
-                <p className="text-lg font-bold text-pink-900">
-                  {trimester === 1 ? '1st' : trimester === 2 ? '2nd' : '3rd'}
+                <p className="text-xs text-pink-700 mb-0.5">Days left</p>
+                <p className="text-sm font-bold text-pink-900">
+                  {daysUntilDue > 0 ? daysUntilDue : 0}
                 </p>
               </div>
-            </div>
-            <div className="pt-2 border-t border-pink-200">
-              <p className="text-xs text-pink-700">
-                <strong>{daysUntilDue > 0 ? daysUntilDue : 0} days</strong> until due date
-              </p>
             </div>
           </CardContent>
         </Card>

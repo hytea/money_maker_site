@@ -72,26 +72,26 @@ export function BMICalculator() {
         <p className="text-base md:text-lg text-gray-600">Calculate your Body Mass Index and daily calorie needs</p>
       </div>
 
-      {/* Mobile Results - Sticky at top */}
+      {/* Mobile Results - Compact summary */}
       {bmi > 0 && (
-        <Card className="md:hidden bg-red-50 border-red-200 sticky top-20 z-10 shadow-lg mb-4">
-          <CardContent className="pt-4 space-y-3">
-            <div className="grid grid-cols-2 gap-3">
+        <Card className="md:hidden bg-red-50 border-red-200 shadow-md mb-4">
+          <CardContent className="p-3">
+            <div className="grid grid-cols-3 gap-2 text-center">
               <div>
-                <p className="text-xs text-red-700 mb-1">BMI</p>
-                <p className="text-2xl font-bold text-red-900">{bmi.toFixed(1)}</p>
+                <p className="text-xs text-red-700 mb-0.5">BMI</p>
+                <p className="text-lg font-bold text-red-900">{bmi.toFixed(1)}</p>
                 <p className="text-xs font-medium text-red-700">{category}</p>
               </div>
               <div>
-                <p className="text-xs text-red-700 mb-1">Daily Calories</p>
-                <p className="text-2xl font-bold text-red-900">{calories}</p>
-                <p className="text-xs text-red-600">to maintain</p>
+                <p className="text-xs text-red-700 mb-0.5">Maintain</p>
+                <p className="text-sm font-bold text-red-900">{calories}</p>
+                <p className="text-xs text-red-600">cal/day</p>
               </div>
-            </div>
-            <div className="pt-2 border-t border-red-200">
-              <p className="text-xs text-red-700">
-                <strong>Lose:</strong> {calories - 500} cal/day • <strong>Gain:</strong> {calories + 500} cal/day
-              </p>
+              <div>
+                <p className="text-xs text-red-700 mb-0.5">Lose/Gain</p>
+                <p className="text-xs font-bold text-red-900">{calories - 500}</p>
+                <p className="text-xs font-bold text-red-900">{calories + 500}</p>
+              </div>
             </div>
           </CardContent>
         </Card>

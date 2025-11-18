@@ -37,21 +37,21 @@ export function DiscountCalculator() {
       </div>
 
       <div className="grid md:grid-cols-3 gap-4 md:gap-6">
-        {/* Mobile Results - Top on mobile */}
+        {/* Mobile Results - Compact summary */}
         <div className="md:hidden">
-          <Card className="border-2 border-purple-200 bg-gradient-to-br from-purple-50 via-white to-purple-50 sticky top-20 z-10 shadow-lg">
-            <CardContent className="p-4">
-              <div className="space-y-3">
-                <div className="bg-white/80 backdrop-blur-sm rounded-lg p-3 border border-purple-200">
-                  <p className="text-xs font-medium text-gray-600 mb-1 flex items-center gap-1">
+          <Card className="border-2 border-purple-200 bg-gradient-to-br from-purple-50 via-white to-purple-50 shadow-md mb-4">
+            <CardContent className="p-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-white/80 backdrop-blur-sm rounded-lg p-2 border border-purple-200">
+                  <p className="text-xs font-medium text-gray-600 mb-0.5 flex items-center gap-1">
                     <Tag className="h-3 w-3" />
                     Final Price
                   </p>
-                  <p className="text-3xl font-bold text-purple-700">${finalPrice.toFixed(2)}</p>
+                  <p className="text-lg font-bold text-purple-700">${finalPrice.toFixed(2)}</p>
                 </div>
-                <div className="bg-white/80 backdrop-blur-sm rounded-lg p-3 border border-purple-200">
-                  <p className="text-xs font-medium text-gray-600 mb-1">You Save</p>
-                  <p className="text-2xl font-bold text-emerald-600">${savings.toFixed(2)}</p>
+                <div className="bg-white/80 backdrop-blur-sm rounded-lg p-2 border border-purple-200">
+                  <p className="text-xs font-medium text-gray-600 mb-0.5">You Save</p>
+                  <p className="text-lg font-bold text-emerald-600">${savings.toFixed(2)}</p>
                 </div>
               </div>
             </CardContent>

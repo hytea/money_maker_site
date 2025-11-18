@@ -86,19 +86,19 @@ export function UnitConverter() {
         <p className="text-base md:text-lg text-gray-600">Convert cooking, weight, and distance measurements</p>
       </div>
 
-      {/* Mobile Results - Sticky at top */}
+      {/* Mobile Results - Compact summary */}
       {fromValue && toValue && (
-        <Card className="md:hidden bg-indigo-50 border-indigo-200 sticky top-20 z-10 shadow-lg mb-4">
-          <CardContent className="pt-4 space-y-3">
-            <div className="grid grid-cols-2 gap-4">
+        <Card className="md:hidden bg-indigo-50 border-indigo-200 shadow-md mb-4">
+          <CardContent className="p-3">
+            <div className="grid grid-cols-2 gap-3 text-center">
               <div>
-                <p className="text-xs text-indigo-700 mb-1">From</p>
-                <p className="text-xl font-bold text-indigo-900">{fromValue}</p>
+                <p className="text-xs text-indigo-700 mb-0.5">From</p>
+                <p className="text-lg font-bold text-indigo-900">{fromValue}</p>
                 <p className="text-xs text-indigo-700">{conversions[category].units[fromUnit].name}</p>
               </div>
               <div>
-                <p className="text-xs text-indigo-700 mb-1">To</p>
-                <p className="text-xl font-bold text-indigo-900">{toValue}</p>
+                <p className="text-xs text-indigo-700 mb-0.5">To</p>
+                <p className="text-lg font-bold text-indigo-900">{toValue}</p>
                 <p className="text-xs text-indigo-700">{conversions[category].units[toUnit].name}</p>
               </div>
             </div>

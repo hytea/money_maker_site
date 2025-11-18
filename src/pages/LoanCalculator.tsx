@@ -51,27 +51,25 @@ export function LoanCalculator() {
       </div>
 
       <div className="grid md:grid-cols-3 gap-4 md:gap-6">
-        {/* Mobile Results - Top on mobile */}
+        {/* Mobile Results - Compact summary */}
         <div className="md:hidden">
-          <Card className="border-2 border-blue-200 bg-gradient-to-br from-blue-50 via-white to-blue-50 sticky top-20 z-10 shadow-lg">
-            <CardContent className="p-4">
-              <div className="space-y-3">
-                <div className="bg-white/80 backdrop-blur-sm rounded-lg p-3 border border-blue-200">
-                  <p className="text-xs font-medium text-gray-600 mb-1 flex items-center gap-1">
+          <Card className="border-2 border-blue-200 bg-gradient-to-br from-blue-50 via-white to-blue-50 shadow-md mb-4">
+            <CardContent className="p-3">
+              <div className="grid grid-cols-3 gap-2">
+                <div className="bg-white/80 backdrop-blur-sm rounded-lg p-2 border border-blue-200">
+                  <p className="text-xs font-medium text-gray-600 mb-0.5 flex items-center gap-1">
                     <DollarSign className="h-3 w-3" />
-                    Monthly Payment
+                    Monthly
                   </p>
-                  <p className="text-3xl font-bold text-blue-700">${monthlyPayment.toFixed(2)}</p>
+                  <p className="text-lg font-bold text-blue-700">${monthlyPayment.toFixed(2)}</p>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-white/80 backdrop-blur-sm rounded-lg p-3 border border-blue-200">
-                    <p className="text-xs font-medium text-gray-600 mb-1">Total Payment</p>
-                    <p className="text-lg font-bold text-gray-900">${totalPayment.toFixed(2)}</p>
-                  </div>
-                  <div className="bg-white/80 backdrop-blur-sm rounded-lg p-3 border border-blue-200">
-                    <p className="text-xs font-medium text-gray-600 mb-1">Total Interest</p>
-                    <p className="text-lg font-bold text-gray-900">${totalInterest.toFixed(2)}</p>
-                  </div>
+                <div className="bg-white/80 backdrop-blur-sm rounded-lg p-2 border border-blue-200">
+                  <p className="text-xs font-medium text-gray-600 mb-0.5">Total</p>
+                  <p className="text-sm font-bold text-gray-900">${totalPayment.toFixed(2)}</p>
+                </div>
+                <div className="bg-white/80 backdrop-blur-sm rounded-lg p-2 border border-blue-200">
+                  <p className="text-xs font-medium text-gray-600 mb-0.5">Interest</p>
+                  <p className="text-sm font-bold text-gray-900">${totalInterest.toFixed(2)}</p>
                 </div>
               </div>
             </CardContent>
