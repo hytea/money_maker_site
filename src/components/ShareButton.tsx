@@ -108,7 +108,7 @@ export function ShareButton({
 
         <Button
           onClick={handleShare}
-          className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+          className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white"
         >
           <Share2 className="w-4 h-4 mr-2" />
           Share Result
@@ -172,7 +172,7 @@ export function ShareButton({
 
           <button
             onClick={() => setShowShareMenu(false)}
-            className="mt-3 text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 w-full text-center"
+            className="mt-3 text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 w-full text-center cursor-pointer"
           >
             Close
           </button>
