@@ -6,9 +6,9 @@ test.describe('About Page', () => {
   });
 
   test('should load about page', async ({ page }) => {
-    await expect(page).toHaveTitle(/About/i);
+    await expect(page).toHaveTitle(/QuickCalc Tools/i);
     const heading = page.locator('h1');
-    await expect(heading).toContainText(/About/i);
+    await expect(heading).toContainText(/About QuickCalc Tools/i);
   });
 
   test('should display page content', async ({ page }) => {

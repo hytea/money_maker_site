@@ -16,11 +16,9 @@ test.describe('Navigation', () => {
   });
 
   test('should navigate to about page', async ({ page }) => {
-    const aboutLink = page.locator('a[href="/about"]');
-    if (await aboutLink.count() > 0) {
-      await aboutLink.click();
-      await expect(page).toHaveURL('/about');
-    }
+    const aboutLink = page.locator('a[href="/about"]').first();
+    await aboutLink.click();
+    await expect(page).toHaveURL('/about');
   });
 
   test('should navigate to analytics dashboard', async ({ page }) => {
@@ -39,8 +37,11 @@ test.describe('Navigation', () => {
 
   test('should handle browser forward button', async ({ page }) => {
     await page.goto('/tip-calculator');
+    await page.waitForLoadState('networkidle');
     await page.goBack();
+    await page.waitForLoadState('networkidle');
     await page.goForward();
+    await page.waitForLoadState('networkidle');
     await expect(page).toHaveURL('/tip-calculator');
   });
 });

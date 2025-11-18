@@ -6,9 +6,9 @@ test.describe('Pregnancy Calculator', () => {
   });
 
   test('should load pregnancy calculator page', async ({ page }) => {
-    await expect(page).toHaveTitle(/Pregnancy Calculator/i);
+    await expect(page).toHaveTitle(/Pregnancy.*Due Date Calculator/i);
     const heading = page.locator('h1');
-    await expect(heading).toContainText(/Pregnancy Calculator/i);
+    await expect(heading).toContainText(/Pregnancy.*Calculator/i);
   });
 
   test('should display date input', async ({ page }) => {

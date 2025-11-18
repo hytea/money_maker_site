@@ -12,7 +12,7 @@ test.describe('Home Page', () => {
   test('should display main heading', async ({ page }) => {
     const heading = page.locator('h1');
     await expect(heading).toBeVisible();
-    await expect(heading).toContainText(/Free Online/i);
+    await expect(heading).toContainText(/Online Calculators/i);
   });
 
   test('should display all calculator cards', async ({ page }) => {

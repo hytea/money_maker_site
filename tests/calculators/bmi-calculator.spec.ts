@@ -8,7 +8,7 @@ test.describe('BMI Calculator', () => {
   test('should load BMI calculator page', async ({ page }) => {
     await expect(page).toHaveTitle(/BMI Calculator/i);
     const heading = page.locator('h1');
-    await expect(heading).toContainText(/BMI Calculator/i);
+    await expect(heading).toContainText(/BMI.*Calorie Calculator/i);
   });
 
   test('should display input fields for height and weight', async ({ page }) => {
