@@ -67,6 +67,7 @@ npm run preview
 2. **Configure Analytics & Ads** (optional):
    - Get a Google Analytics tracking ID from https://analytics.google.com
    - Apply for Google AdSense at https://www.google.com/adsense
+   - **For detailed AdSense setup instructions, see [GOOGLE_ADS_SETUP.md](./GOOGLE_ADS_SETUP.md)**
    - Add environment variables in Netlify:
      - Go to Site settings > Environment variables
      - Add `VITE_GA_MEASUREMENT_ID` with your Google Analytics ID
@@ -201,7 +202,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { AdPlaceholder } from '@/components/AdSense';
+import { AdSense } from '@/components/AdSense';
 
 export function YourCalculator() {
   useEffect(() => {
@@ -212,7 +213,7 @@ export function YourCalculator() {
     <div className="max-w-4xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-gray-900 mb-2">Your Calculator</h1>
       {/* Add your calculator UI here */}
-      <AdPlaceholder label="Calculator Ad" />
+      <AdSense slot="YOUR_AD_SLOT_ID" format="auto" responsive={true} />
     </div>
   );
 }
@@ -282,10 +283,11 @@ Non-technical users who:
 
 ### Monetization Strategy
 
-1. **Google AdSense**: Primary revenue source
+1. **Google AdSense**: Primary revenue source (✅ **IMPLEMENTED**)
    - Header banner ad (728x90 or responsive)
    - Sidebar ads on calculator pages
    - In-content ads between results
+   - **See [GOOGLE_ADS_SETUP.md](./GOOGLE_ADS_SETUP.md) for complete setup instructions**
 
 2. **Traffic Sources**:
    - Organic search (Google, Bing)

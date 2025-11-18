@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { AdPlaceholder } from '@/components/AdSense';
+import { AdSense } from '@/components/AdSense';
 import { DollarSign, Users, TrendingUp, CheckCircle2 } from 'lucide-react';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import { ShareButton } from '@/components/ShareButton';
@@ -191,7 +191,7 @@ export function TipCalculator() {
 
           {/* Hide ad on mobile, show on desktop */}
           <div className="hidden md:block">
-            <AdPlaceholder label="Calculator Ad Space" />
+            <AdSense slot="4567890123" format="rectangle" />
           </div>
         </div>
 

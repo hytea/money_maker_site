@@ -17,7 +17,7 @@ import {
   Star,
   Clock
 } from 'lucide-react';
-import { AdPlaceholder } from '@/components/AdSense';
+import { AdSense } from '@/components/AdSense';
 import { useEffect, useState } from 'react';
 import { FavoritesManager } from '@/utils/favorites';
 import { ToolUsageTracker } from '@/utils/relatedTools';
@@ -171,7 +171,7 @@ export function Home() {
       {/* Ad Placement - Hidden on mobile */}
       <div className="bg-white/50 py-6 md:py-8 hidden md:block">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <AdPlaceholder label="Featured Ad Space" />
+          <AdSense slot="2345678901" format="auto" responsive={true} />
         </div>
       </div>
 
@@ -289,7 +289,7 @@ export function Home() {
 
         {/* Bottom Ad - Hidden on mobile */}
         <div className="mb-8 sm:mb-10 md:mb-12 hidden md:block">
-          <AdPlaceholder label="Bottom Ad Space" />
+          <AdSense slot="3456789012" format="auto" responsive={true} />
         </div>
 
         {/* Features Section */}

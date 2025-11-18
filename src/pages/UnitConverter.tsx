@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { AdPlaceholder } from '@/components/AdSense';
+import { AdSense } from '@/components/AdSense';
 
 type ConversionCategory = 'cooking' | 'weight' | 'distance';
 
@@ -189,7 +189,7 @@ export function UnitConverter() {
           </Card>
 
           <div className="mt-6 hidden md:block">
-            <AdPlaceholder label="Unit Converter Ad" />
+            <AdSense slot="4567890123" format="auto" responsive={true} />
           </div>
         </div>
 

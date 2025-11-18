@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { AdPlaceholder } from '@/components/AdSense';
+import { AdSense } from '@/components/AdSense';
 import { ResultInsights } from '@/components/ResultInsights';
 import { DollarSign, TrendingUp, Calendar, Download, PieChart } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, PieChart as RePieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
@@ -270,7 +270,7 @@ export function LoanCalculator() {
 
           {/* Hide ad on mobile */}
           <div className="mt-4 md:mt-6 hidden md:block">
-            <AdPlaceholder label="Loan Calculator Ad" />
+            <AdSense slot="4567890123" format="auto" responsive={true} />
           </div>
         </div>
 

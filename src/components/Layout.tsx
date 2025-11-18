@@ -1,6 +1,6 @@
 import { Link, Outlet } from 'react-router-dom';
 import { Calculator, Sparkles, Menu, X } from 'lucide-react';
-import { AdPlaceholder } from './AdSense';
+import { AdSense } from './AdSense';
 import { Separator } from './ui/separator';
 import { useState } from 'react';
 
@@ -85,7 +85,7 @@ export function Layout() {
       {/* Top Banner Ad - Hidden on mobile, visible on desktop */}
       <div className="bg-gradient-to-r from-primary-50/50 to-accent-50/50 border-b border-gray-200 hidden md:block">
         <div className="max-w-7xl mx-auto px-4 py-4">
-          <AdPlaceholder label="Header Banner Ad" className="max-w-4xl mx-auto" />
+          <AdSense slot="1234567890" format="horizontal" className="max-w-4xl mx-auto" />
         </div>
       </div>
 

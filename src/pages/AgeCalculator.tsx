@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { AdPlaceholder } from '@/components/AdSense';
+import { AdSense } from '@/components/AdSense';
 
 export function AgeCalculator() {
   const [birthDate, setBirthDate] = useState('');
@@ -110,7 +110,7 @@ export function AgeCalculator() {
           </Card>
 
           <div className="mt-6 hidden md:block">
-            <AdPlaceholder label="Age Calculator Ad" />
+            <AdSense slot="4567890123" format="auto" responsive={true} />
           </div>
         </div>
 

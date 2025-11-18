@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { AdPlaceholder } from '@/components/AdSense';
+import { AdSense } from '@/components/AdSense';
 import { Percent, DollarSign, Tag } from 'lucide-react';
 
 export function DiscountCalculator() {
@@ -109,7 +109,7 @@ export function DiscountCalculator() {
 
           {/* Hide ad on mobile */}
           <div className="mt-4 md:mt-6 hidden md:block">
-            <AdPlaceholder label="Discount Calculator Ad" />
+            <AdSense slot="4567890123" format="auto" responsive={true} />
           </div>
         </div>
 
