@@ -58,13 +58,13 @@ export function ResultInsights({ insights, title = 'Personalized Insights' }: Re
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3 pt-6">
-        {insights.map((insight, index) => {
+        {insights.map((insight) => {
           const Icon = iconMap[insight.type];
           const colors = colorMap[insight.type];
 
           return (
             <div
-              key={index}
+              key={`${insight.type}-${insight.title}`}
               className={`p-4 rounded-lg border ${colors.bg} ${colors.border}`}
             >
               <div className="flex gap-3">

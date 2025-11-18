@@ -1,8 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Share2, Facebook, Twitter, Link2, Check, History } from 'lucide-react';
 import { Button } from './ui/button';
 import { createSharedResult, generateShareUrl, incrementShareCount } from '../lib/sharedResults';
 import { addToHistory } from '../lib/calculationHistory';
+
+// Secure window.open helper to prevent opener access
+const secureWindowOpen = (url: string, features?: string): void => {
+  const newWindow = window.open(url, '_blank', features);
+  if (newWindow) {
+    newWindow.opener = null;
+  }
+};
 
 interface ShareButtonProps {
   calculatorType: string;
@@ -25,6 +33,22 @@ export function ShareButton({
   const [copied, setCopied] = useState(false);
   const [saved, setSaved] = useState(false);
 
+  // Cleanup for copied state timeout
+  useEffect(() => {
+    if (copied) {
+      const timer = setTimeout(() => setCopied(false), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [copied]);
+
+  // Cleanup for saved state timeout
+  useEffect(() => {
+    if (saved) {
+      const timer = setTimeout(() => setSaved(false), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [saved]);
+
   const handleShare = () => {
     setShowShareMenu(!showShareMenu);
   };
@@ -32,7 +56,6 @@ export function ShareButton({
   const handleSaveToHistory = () => {
     addToHistory(calculatorType, inputs, results, title);
     setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
   };
 
   const createShareLink = (): string => {
@@ -45,7 +68,6 @@ export function ShareButton({
     try {
       await navigator.clipboard.writeText(shareUrl);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
     } catch (error) {
       console.error('Failed to copy link:', error);
     }
@@ -55,7 +77,7 @@ export function ShareButton({
     const shareUrl = createShareLink();
     incrementShareCount(shareUrl.split('/').pop() || '');
     const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
-    window.open(facebookUrl, '_blank', 'width=600,height=400');
+    secureWindowOpen(facebookUrl, 'width=600,height=400');
   };
 
   const handleShareTwitter = () => {
@@ -63,7 +85,7 @@ export function ShareButton({
     incrementShareCount(shareUrl.split('/').pop() || '');
     const text = `${title} - ${description}`;
     const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(text)}`;
-    window.open(twitterUrl, '_blank', 'width=600,height=400');
+    secureWindowOpen(twitterUrl, 'width=600,height=400');
   };
 
   const handleShareNative = async () => {

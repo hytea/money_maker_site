@@ -66,9 +66,9 @@ export function PracticalTips({ toolPath, limit }: PracticalTipsProps) {
         Helpful Tips
       </h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {tips.map((tip, index) => (
+        {tips.map((tip) => (
           <div
-            key={index}
+            key={`${tip.category}-${tip.title}`}
             className={`p-4 rounded-lg border-2 ${getCategoryColor(tip.category)}`}
           >
             <div className="flex items-start gap-3">

@@ -38,10 +38,41 @@ export function TipCalculator() {
     if (inputs.numPeople !== undefined) setNumPeople(String(inputs.numPeople));
   };
 
+  // Input validation handlers
+  const handleBillAmountChange = (value: string) => {
+    // Allow empty string or valid positive numbers with decimals
+    if (value === '' || /^\d*\.?\d*$/.test(value)) {
+      const num = parseFloat(value);
+      if (value === '' || (num >= 0 && num <= 999999)) {
+        setBillAmount(value);
+      }
+    }
+  };
+
+  const handleTipPercentChange = (value: string) => {
+    // Allow empty string or valid positive numbers
+    if (value === '' || /^\d*\.?\d*$/.test(value)) {
+      const num = parseFloat(value);
+      if (value === '' || (num >= 0 && num <= 100)) {
+        setTipPercent(value);
+      }
+    }
+  };
+
+  const handleNumPeopleChange = (value: string) => {
+    // Allow empty string or valid positive integers
+    if (value === '' || /^\d+$/.test(value)) {
+      const num = parseInt(value);
+      if (value === '' || (num >= 1 && num <= 1000)) {
+        setNumPeople(value);
+      }
+    }
+  };
+
   useEffect(() => {
     const bill = parseFloat(billAmount) || 0;
     const tip = parseFloat(tipPercent) || 0;
-    const people = parseInt(numPeople) || 1;
+    const people = Math.max(1, parseInt(numPeople) || 1); // Ensure at least 1 person to prevent division by zero
 
     const tipAmt = bill * (tip / 100);
     const total = bill + tipAmt;
@@ -132,9 +163,11 @@ export function TipCalculator() {
                     type="number"
                     inputMode="decimal"
                     step="0.01"
+                    min="0"
+                    max="999999"
                     placeholder="0.00"
                     value={billAmount}
-                    onChange={(e) => setBillAmount(e.target.value)}
+                    onChange={(e) => handleBillAmountChange(e.target.value)}
                     className="text-lg pl-10 h-14 md:h-12"
                   />
                 </div>
@@ -163,9 +196,11 @@ export function TipCalculator() {
                   type="number"
                   inputMode="numeric"
                   step="1"
+                  min="0"
+                  max="100"
                   placeholder="Custom %"
                   value={tipPercent}
-                  onChange={(e) => setTipPercent(e.target.value)}
+                  onChange={(e) => handleTipPercentChange(e.target.value)}
                   className="text-lg h-14 md:h-12"
                 />
               </div>
@@ -179,9 +214,10 @@ export function TipCalculator() {
                     type="number"
                     inputMode="numeric"
                     min="1"
+                    max="1000"
                     placeholder="1"
                     value={numPeople}
-                    onChange={(e) => setNumPeople(e.target.value)}
+                    onChange={(e) => handleNumPeopleChange(e.target.value)}
                     className="text-lg pl-10 h-14 md:h-12"
                   />
                 </div>

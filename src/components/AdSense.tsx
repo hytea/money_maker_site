@@ -1,5 +1,12 @@
 import { useEffect } from 'react';
 
+// Extend Window interface for AdSense
+declare global {
+  interface Window {
+    adsbygoogle?: unknown[];
+  }
+}
+
 interface AdSenseProps {
   slot: string;
   format?: string;
@@ -12,9 +19,7 @@ export function AdSense({ slot, format = 'auto', responsive = true, className = 
 
   useEffect(() => {
     try {
-      // @ts-ignore
-      if (window.adsbygoogle && process.env.NODE_ENV === 'production') {
-        // @ts-ignore
+      if (window.adsbygoogle && import.meta.env.MODE === 'production') {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
       }
     } catch (err) {

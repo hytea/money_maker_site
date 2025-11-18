@@ -9,7 +9,15 @@ import {
   Activity,
 } from 'lucide-react';
 
-const FIREBASE_PROJECT_ID = 'smart-calc-app-hub';
+// Secure window.open helper to prevent opener access
+const secureWindowOpen = (url: string): void => {
+  const newWindow = window.open(url, '_blank');
+  if (newWindow) {
+    newWindow.opener = null;
+  }
+};
+
+const FIREBASE_PROJECT_ID = import.meta.env.VITE_FIREBASE_PROJECT_ID || 'smart-calc-app-hub';
 const FIREBASE_ANALYTICS_URL = `https://console.firebase.google.com/project/${FIREBASE_PROJECT_ID}/analytics`;
 const GA4_URL = 'https://analytics.google.com';
 
@@ -56,7 +64,7 @@ export function AnalyticsDashboard() {
               View detailed analytics including page views, events, user engagement, conversions, and real-time activity for your calculator website.
             </p>
             <Button
-              onClick={() => window.open(FIREBASE_ANALYTICS_URL, '_blank')}
+              onClick={() => secureWindowOpen(FIREBASE_ANALYTICS_URL)}
               className="w-full sm:w-auto"
             >
               Open Firebase Analytics
@@ -85,7 +93,7 @@ export function AnalyticsDashboard() {
               Access comprehensive reports, custom dashboards, audience insights, and advanced analytics features in Google Analytics 4.
             </p>
             <Button
-              onClick={() => window.open(GA4_URL, '_blank')}
+              onClick={() => secureWindowOpen(GA4_URL)}
               variant="outline"
               className="w-full sm:w-auto"
             >

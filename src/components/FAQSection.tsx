@@ -58,7 +58,7 @@ export function FAQSection({ toolPath, limit }: FAQSectionProps) {
 
           return (
             <div
-              key={index}
+              key={faq.question}
               className="border-2 border-gray-200 rounded-lg overflow-hidden bg-white"
             >
               <button

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/config/firebase';
@@ -9,14 +10,17 @@ import { BarChart3, LogOut, Shield, User } from 'lucide-react';
 export function AdminConsole() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [loggingOut, setLoggingOut] = useState(false);
 
   const handleLogout = async () => {
+    setLoggingOut(true);
     try {
       await signOut(auth);
       navigate('/');
     } catch (error) {
       console.error('Error signing out:', error);
       alert('Failed to sign out. Please try again.');
+      setLoggingOut(false);
     }
   };
 
@@ -41,9 +45,18 @@ export function AdminConsole() {
               Manage your QuickCalc Tools administration
             </p>
           </div>
-          <Button variant="outline" onClick={handleLogout}>
-            <LogOut className="h-4 w-4 mr-2" />
-            Logout
+          <Button variant="outline" onClick={handleLogout} disabled={loggingOut}>
+            {loggingOut ? (
+              <>
+                <div className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-gray-600 mr-2"></div>
+                Logging out...
+              </>
+            ) : (
+              <>
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
+              </>
+            )}
           </Button>
         </div>
       </div>
