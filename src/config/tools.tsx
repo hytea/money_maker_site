@@ -8,6 +8,7 @@ import {
   Users,
   ArrowLeftRight,
   Home as HomeIcon,
+  Sparkles,
   type LucideIcon
 } from 'lucide-react';
 
@@ -22,6 +23,7 @@ import { DiscountCalculator } from '@/pages/DiscountCalculator';
 import { AgeCalculator } from '@/pages/AgeCalculator';
 import { SplitBillCalculator } from '@/pages/SplitBillCalculator';
 import { UnitConverter } from '@/pages/UnitConverter';
+import { AIHealthCoach } from '@/pages/AIHealthCoach';
 
 export interface Tool {
   // Basic info
@@ -55,6 +57,19 @@ export interface Tool {
  * The rest (routing, sitemap, SEO) is automatic!
  */
 export const tools: Tool[] = [
+  {
+    name: 'AI Health Coach',
+    path: '/ai-health-coach',
+    component: AIHealthCoach,
+    description: 'Chat with AI for personalized health & fitness advice',
+    icon: Sparkles,
+    color: 'text-emerald-600',
+    bgColor: 'bg-emerald-50',
+    title: 'AI Health Coach - Free Personalized Health & Fitness Advice | QuickCalc Tools',
+    metaDescription: 'Free AI-powered health coach providing personalized advice on nutrition, fitness, wellness, and healthy lifestyle habits. Chat 24/7 with your virtual health advisor.',
+    keywords: ['ai health coach', 'free health advisor', 'ai fitness coach', 'nutrition advice', 'wellness chatbot', 'health ai', 'fitness advice', 'personalized health'],
+    searchVolume: 'high'
+  },
   {
     name: 'Tip Calculator',
     path: '/tip-calculator',
