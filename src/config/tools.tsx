@@ -7,6 +7,7 @@ import {
   Calendar,
   Users,
   ArrowLeftRight,
+  Home as HomeIcon,
   type LucideIcon
 } from 'lucide-react';
 
@@ -14,6 +15,7 @@ import {
 import { Home } from '@/pages/Home';
 import { TipCalculator } from '@/pages/TipCalculator';
 import { LoanCalculator } from '@/pages/LoanCalculator';
+import { MortgageCalculator } from '@/pages/MortgageCalculator';
 import { PregnancyCalculator } from '@/pages/PregnancyCalculator';
 import { BMICalculator } from '@/pages/BMICalculator';
 import { DiscountCalculator } from '@/pages/DiscountCalculator';
@@ -77,6 +79,19 @@ export const tools: Tool[] = [
     title: 'Loan Calculator - Calculate Monthly Payments & Export PDF Report | QuickCalc Tools',
     metaDescription: 'Free loan calculator with visual charts and PDF reports. Calculate monthly payments, total interest, amortization schedule. Get personalized insights and export detailed reports for mortgages, auto loans, and personal loans.',
     keywords: ['loan calculator', 'mortgage calculator', 'car loan', 'monthly payment calculator', 'interest calculator', 'loan calculator pdf', 'amortization chart'],
+    searchVolume: 'high'
+  },
+  {
+    name: 'Mortgage Calculator',
+    path: '/mortgage-calculator',
+    component: MortgageCalculator,
+    description: 'Calculate home loan payments with taxes and insurance',
+    icon: HomeIcon,
+    color: 'text-green-600',
+    bgColor: 'bg-green-50',
+    title: 'Mortgage Calculator - Calculate Monthly Home Loan Payments | QuickCalc Tools',
+    metaDescription: 'Free mortgage calculator to estimate monthly home loan payments including principal, interest, taxes, insurance, and PMI. See amortization schedule and export PDF reports. Compare different mortgage scenarios.',
+    keywords: ['mortgage calculator', 'home loan calculator', 'mortgage payment calculator', 'house payment calculator', 'mortgage with taxes and insurance', 'piti calculator', 'mortgage amortization'],
     searchVolume: 'high'
   },
   {
