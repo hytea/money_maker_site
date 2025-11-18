@@ -8,6 +8,8 @@ import { Separator } from '@/components/ui/separator';
 import { AdPlaceholder } from '@/components/AdSense';
 import { DollarSign, Users, TrendingUp, CheckCircle2 } from 'lucide-react';
 import { useAnalytics } from '@/hooks/useAnalytics';
+import { ShareButton } from '@/components/ShareButton';
+import { CalculationHistory } from '@/components/CalculationHistory';
 
 export function TipCalculator() {
   const [billAmount, setBillAmount] = useState('');
@@ -23,6 +25,12 @@ export function TipCalculator() {
   useEffect(() => {
     document.title = 'Tip Calculator - Calculate Tips and Split Bills | QuickCalc Tools';
   }, []);
+
+  const handleLoadFromHistory = (inputs: Record<string, any>) => {
+    if (inputs.billAmount !== undefined) setBillAmount(String(inputs.billAmount));
+    if (inputs.tipPercent !== undefined) setTipPercent(String(inputs.tipPercent));
+    if (inputs.numPeople !== undefined) setNumPeople(String(inputs.numPeople));
+  };
 
   useEffect(() => {
     const bill = parseFloat(billAmount) || 0;
@@ -214,15 +222,37 @@ export function TipCalculator() {
                 </div>
 
                 {billAmount && parseFloat(billAmount) > 0 && (
-                  <div className="mt-4 pt-4 border-t border-primary-200">
-                    <div className="flex items-center gap-2 text-xs text-gray-600">
-                      <CheckCircle2 className="h-3.5 w-3.5 text-green-500" />
-                      <span>Calculation complete</span>
+                  <>
+                    <div className="mt-4 pt-4 border-t border-primary-200">
+                      <div className="flex items-center gap-2 text-xs text-gray-600 mb-3">
+                        <CheckCircle2 className="h-3.5 w-3.5 text-green-500" />
+                        <span>Calculation complete</span>
+                      </div>
                     </div>
-                  </div>
+                    <ShareButton
+                      calculatorType="Tip Calculator"
+                      title={`Tip Calculation: $${billAmount} bill with ${tipPercent}% tip`}
+                      description={`Total: $${totalAmount.toFixed(2)} | Per person: $${perPerson.toFixed(2)}`}
+                      inputs={{
+                        billAmount: parseFloat(billAmount),
+                        tipPercent: parseFloat(tipPercent),
+                        numPeople: parseInt(numPeople),
+                      }}
+                      results={{
+                        tipAmount: parseFloat(tipAmount.toFixed(2)),
+                        totalAmount: parseFloat(totalAmount.toFixed(2)),
+                        perPerson: parseFloat(perPerson.toFixed(2)),
+                      }}
+                    />
+                  </>
                 )}
               </CardContent>
             </Card>
+
+            <CalculationHistory
+              calculatorType="tip-calculator"
+              onLoadCalculation={handleLoadFromHistory}
+            />
 
             <Card className="border border-gray-200 bg-gradient-to-br from-blue-50 to-white">
               <CardContent className="p-4">

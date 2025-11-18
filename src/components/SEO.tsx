@@ -3,6 +3,60 @@ import { useLocation } from 'react-router-dom';
 import { tools, homePage } from '@/config/tools';
 import { analytics } from '@/lib/analytics';
 
+/**
+ * Generate Schema.org JSON-LD structured data for calculator pages
+ */
+function generateSchemaMarkup(pageConfig: any, pathname: string): object {
+  const baseUrl = window.location.origin;
+
+  // Base WebApplication schema
+  const schema: any = {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    'name': pageConfig.title,
+    'description': pageConfig.metaDescription,
+    'url': `${baseUrl}${pathname}`,
+    'applicationCategory': 'UtilityApplication',
+    'operatingSystem': 'Any',
+    'offers': {
+      '@type': 'Offer',
+      'price': '0',
+      'priceCurrency': 'USD',
+    },
+  };
+
+  // Add specific calculator types based on path
+  if (pathname.includes('calculator') || pathname.includes('converter')) {
+    schema['@type'] = ['WebApplication', 'SoftwareApplication'];
+    schema.softwareApplicationCategory = 'Calculator';
+  }
+
+  // Add BreadcrumbList for better navigation
+  const breadcrumbs = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    'itemListElement': [
+      {
+        '@type': 'ListItem',
+        'position': 1,
+        'name': 'Home',
+        'item': baseUrl,
+      },
+    ],
+  };
+
+  if (pathname !== '/') {
+    breadcrumbs.itemListElement.push({
+      '@type': 'ListItem',
+      'position': 2,
+      'name': pageConfig.title,
+      'item': `${baseUrl}${pathname}`,
+    });
+  }
+
+  return [schema, breadcrumbs];
+}
+
 export function SEO() {
   const location = useLocation();
 
@@ -68,6 +122,19 @@ export function SEO() {
         }
         tag.setAttribute('content', content);
       });
+
+      // Add Schema.org structured data
+      const schemas = generateSchemaMarkup(pageConfig, location.pathname);
+
+      // Remove existing schema script tags
+      const existingSchemas = document.querySelectorAll('script[type="application/ld+json"]');
+      existingSchemas.forEach(script => script.remove());
+
+      // Add new schema markup
+      const schemaScript = document.createElement('script');
+      schemaScript.type = 'application/ld+json';
+      schemaScript.text = JSON.stringify(schemas);
+      document.head.appendChild(schemaScript);
 
       // Track page view with analytics
       analytics.trackPageView({
