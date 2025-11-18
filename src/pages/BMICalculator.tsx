@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { AdPlaceholder } from '@/components/AdSense';
 import { ResultInsights } from '@/components/ResultInsights';
+import { AIInsights } from '@/components/AIInsights';
 import { Download, Activity, Target } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine, Cell } from 'recharts';
 import { exportToPDF } from '@/lib/pdfExport';
@@ -512,6 +513,24 @@ export function BMICalculator() {
 
           {/* Personalized Insights */}
           <ResultInsights insights={getInsights()} title="Personalized Health Insights" />
+
+          {/* AI-Powered Insights */}
+          <AIInsights
+            context={{
+              bmi: bmi.toFixed(1),
+              category,
+              weight: `${weight} ${system === 'imperial' ? 'lbs' : 'kg'}`,
+              height: system === 'imperial' ? `${feet}' ${inches}"` : `${height} cm`,
+              age: age || 'not specified',
+              gender,
+              activityLevel: parseFloat(activity) <= 1.2 ? 'sedentary' :
+                parseFloat(activity) <= 1.375 ? 'lightly active' :
+                parseFloat(activity) <= 1.55 ? 'moderately active' :
+                parseFloat(activity) <= 1.725 ? 'very active' : 'super active',
+              dailyCalories: calories,
+            }}
+            toolType="BMI & Health"
+          />
 
           {/* Detailed Health Metrics */}
           <Card className="border-2">
