@@ -21,6 +21,7 @@ import { AdPlaceholder } from '@/components/AdSense';
 import { useEffect, useState } from 'react';
 import { FavoritesManager } from '@/utils/favorites';
 import { ToolUsageTracker } from '@/utils/relatedTools';
+import ParticleAnimation from '@/components/ParticleAnimation';
 
 const calculators = [
   {
@@ -120,6 +121,9 @@ export function Home() {
 
   return (
     <div className="relative">
+      {/* Interactive Particle Animation Background */}
+      <ParticleAnimation />
+
       {/* Hero Section */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-100/50 via-white to-accent-100/50 -z-10"></div>
