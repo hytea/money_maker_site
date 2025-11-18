@@ -13,10 +13,14 @@ import {
   Zap,
   Shield,
   Smartphone,
-  ArrowRight
+  ArrowRight,
+  Star,
+  Clock
 } from 'lucide-react';
 import { AdPlaceholder } from '@/components/AdSense';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { FavoritesManager } from '@/utils/favorites';
+import { ToolUsageTracker } from '@/utils/relatedTools';
 
 const calculators = [
   {
@@ -102,9 +106,17 @@ const calculators = [
 ];
 
 export function Home() {
+  const [favorites, setFavorites] = useState<string[]>([]);
+  const [recentlyUsed, setRecentlyUsed] = useState<string[]>([]);
+
   useEffect(() => {
     document.title = 'QuickCalc Tools - Free Online Calculators & Converters';
+    setFavorites(FavoritesManager.getAll());
+    setRecentlyUsed(ToolUsageTracker.getRecentlyUsed(4));
   }, []);
+
+  const favoriteCalculators = calculators.filter(calc => favorites.includes(calc.path));
+  const recentCalculators = calculators.filter(calc => recentlyUsed.includes(calc.path));
 
   return (
     <div className="relative">
@@ -165,9 +177,79 @@ export function Home() {
 
       {/* Calculator Grid */}
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-8 sm:py-12 md:py-16">
+        {/* Favorites Section */}
+        {favoriteCalculators.length > 0 && (
+          <div className="mb-12">
+            <div className="flex items-center gap-2 mb-6">
+              <Star className="h-5 w-5 text-amber-600 fill-amber-600" />
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
+                Your Favorites
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
+              {favoriteCalculators.map((calc) => {
+                const Icon = calc.icon;
+                return (
+                  <Link key={calc.path} to={calc.path} className="group">
+                    <Card className={`h-full card-hover border-2 ${calc.borderColor} relative overflow-hidden`}>
+                      <CardHeader className="relative p-4 sm:p-5 md:p-6">
+                        <div className={`w-12 sm:w-14 h-12 sm:h-14 rounded-lg sm:rounded-xl ${calc.bgColor} flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform duration-200`}>
+                          <Icon className={`h-6 sm:h-7 w-6 sm:w-7 ${calc.color}`} />
+                        </div>
+                        <CardTitle className="text-base sm:text-lg group-hover:text-primary-700 transition-colors flex items-center justify-between">
+                          {calc.name}
+                          <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
+                        </CardTitle>
+                        <CardDescription className="text-xs sm:text-sm leading-relaxed">
+                          {calc.description}
+                        </CardDescription>
+                      </CardHeader>
+                    </Card>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Recently Used Section */}
+        {recentCalculators.length > 0 && (
+          <div className="mb-12">
+            <div className="flex items-center gap-2 mb-6">
+              <Clock className="h-5 w-5 text-blue-600" />
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
+                Recently Used
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
+              {recentCalculators.map((calc) => {
+                const Icon = calc.icon;
+                return (
+                  <Link key={calc.path} to={calc.path} className="group">
+                    <Card className={`h-full card-hover border-2 ${calc.borderColor} relative overflow-hidden`}>
+                      <CardHeader className="relative p-4 sm:p-5 md:p-6">
+                        <div className={`w-12 sm:w-14 h-12 sm:h-14 rounded-lg sm:rounded-xl ${calc.bgColor} flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform duration-200`}>
+                          <Icon className={`h-6 sm:h-7 w-6 sm:w-7 ${calc.color}`} />
+                        </div>
+                        <CardTitle className="text-base sm:text-lg group-hover:text-primary-700 transition-colors flex items-center justify-between">
+                          {calc.name}
+                          <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
+                        </CardTitle>
+                        <CardDescription className="text-xs sm:text-sm leading-relaxed">
+                          {calc.description}
+                        </CardDescription>
+                      </CardHeader>
+                    </Card>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         <div className="text-center mb-8 sm:mb-10 md:mb-12">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 px-4">
-            Choose Your Calculator
+            {favoriteCalculators.length > 0 || recentCalculators.length > 0 ? 'All Calculators' : 'Choose Your Calculator'}
           </h2>
           <p className="text-gray-600 text-base sm:text-lg px-4">
             Select from our collection of professional calculators
@@ -255,20 +337,88 @@ export function Home() {
           </div>
         </div>
 
-        {/* SEO Content */}
-        <div className="mt-12 sm:mt-16 md:mt-20 prose prose-sm sm:prose-base md:prose-lg max-w-none">
-          <div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-8 border border-gray-200">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Popular Free Online Calculators</h2>
-            <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 leading-relaxed">
-              Our <strong>tip calculator</strong> helps you calculate the perfect tip at restaurants and split bills with friends.
-              The <strong>loan calculator</strong> shows you monthly payments for mortgages, car loans, and personal loans with detailed breakdowns.
-              Expecting? Use our <strong>pregnancy calculator</strong> to find your due date and track your pregnancy week by week.
-            </p>
-            <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
-              Need to check your health? Our <strong>BMI calculator</strong> determines if you're at a healthy weight and calculates
-              your daily calorie needs. Shopping? The <strong>discount calculator</strong> shows you the final price and how much you save.
-              Convert between cooking measurements, weights, and distances with our <strong>unit converter</strong>.
-            </p>
+        {/* Real Use Cases */}
+        <div className="mt-12 sm:mt-16 md:mt-20">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8 text-center px-4">
+            When You Need Quick Answers
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 border-2 border-gray-200">
+              <h3 className="font-bold text-gray-900 mb-3">Making Financial Decisions</h3>
+              <p className="text-gray-600 text-sm leading-relaxed mb-3">
+                Shopping for a car or home? Use the <strong>loan calculator</strong> to see exactly what your monthly payments will be
+                before you commit. Find out how much you'll pay in interest over time and whether you can afford it.
+              </p>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Standing in a store looking at a sale? The <strong>discount calculator</strong> shows you the real price after discounts,
+                so you know if it's actually a good deal.
+              </p>
+            </div>
+
+            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 border-2 border-gray-200">
+              <h3 className="font-bold text-gray-900 mb-3">Daily Life Situations</h3>
+              <p className="text-gray-600 text-sm leading-relaxed mb-3">
+                At a restaurant? The <strong>tip calculator</strong> figures out the right tip amount and splits the bill fairly
+                when you're with friends. No awkward math at the table.
+              </p>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Cooking from a recipe? The <strong>unit converter</strong> translates measurements instantly - whether you need
+                tablespoons to cups or grams to ounces.
+              </p>
+            </div>
+
+            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 border-2 border-gray-200">
+              <h3 className="font-bold text-gray-900 mb-3">Health & Wellness Tracking</h3>
+              <p className="text-gray-600 text-sm leading-relaxed mb-3">
+                Expecting a baby? The <strong>pregnancy calculator</strong> tells you your due date and tracks your pregnancy week by week.
+                Know exactly what trimester you're in and when to expect major milestones.
+              </p>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Starting a fitness journey? The <strong>BMI calculator</strong> gives you a baseline health metric and calculates
+                your daily calorie needs based on your goals.
+              </p>
+            </div>
+
+            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 border-2 border-gray-200">
+              <h3 className="font-bold text-gray-900 mb-3">Planning & Organizing</h3>
+              <p className="text-gray-600 text-sm leading-relaxed mb-3">
+                Need to know exactly how old you are for an application? The <strong>age calculator</strong> gives you precise
+                age down to the day - useful for retirement planning, insurance, and milestones.
+              </p>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Going out with a group? The <strong>split bill calculator</strong> divides expenses fairly, whether it's dinner,
+                a vacation rental, or shared purchases.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Why No App? */}
+        <div className="mt-12 sm:mt-16 md:mt-20">
+          <div className="bg-gradient-to-br from-primary-50 to-accent-50 rounded-2xl p-6 sm:p-8 border-2 border-primary-200">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
+              Why Use a Web Calculator?
+            </h2>
+            <div className="grid md:grid-cols-3 gap-6 text-sm sm:text-base">
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-2">No Download Required</h3>
+                <p className="text-gray-700 leading-relaxed">
+                  Works instantly in your browser. No app store, no installation, no storage space used on your phone.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-2">Always Updated</h3>
+                <p className="text-gray-700 leading-relaxed">
+                  You automatically get the latest version. No update prompts, no waiting for app store approval.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-2">Privacy First</h3>
+                <p className="text-gray-700 leading-relaxed">
+                  Calculations happen in your browser. We don't collect your calculation data or require an account.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

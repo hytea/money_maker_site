@@ -10,6 +10,11 @@ import { DollarSign, Users, TrendingUp, CheckCircle2 } from 'lucide-react';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import { ShareButton } from '@/components/ShareButton';
 import { CalculationHistory } from '@/components/CalculationHistory';
+import { FavoriteButton } from '@/components/FavoriteButton';
+import { PracticalTips } from '@/components/PracticalTips';
+import { FAQSection } from '@/components/FAQSection';
+import { RelatedTools } from '@/components/RelatedTools';
+import { ToolUsageTracker } from '@/utils/relatedTools';
 
 export function TipCalculator() {
   const [billAmount, setBillAmount] = useState('');
@@ -24,6 +29,7 @@ export function TipCalculator() {
 
   useEffect(() => {
     document.title = 'Tip Calculator - Calculate Tips and Split Bills | QuickCalc Tools';
+    ToolUsageTracker.trackUsage('/tip-calculator');
   }, []);
 
   const handleLoadFromHistory = (inputs: Record<string, any>) => {
@@ -62,10 +68,15 @@ export function TipCalculator() {
   return (
     <div className="max-w-6xl mx-auto px-3 sm:px-4 py-6 md:py-12">
       {/* Page Header */}
-      <div className="mb-6 md:mb-8 text-center md:text-left">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-emerald-100 to-emerald-50 border border-emerald-200 mb-3 md:mb-4">
-          <DollarSign className="h-3.5 w-3.5 text-emerald-600" />
-          <span className="text-xs font-semibold text-emerald-800">POPULAR TOOL</span>
+      <div className="mb-6 md:mb-8">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-3 md:mb-4">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-emerald-100 to-emerald-50 border border-emerald-200 mb-3">
+              <DollarSign className="h-3.5 w-3.5 text-emerald-600" />
+              <span className="text-xs font-semibold text-emerald-800">POPULAR TOOL</span>
+            </div>
+          </div>
+          <FavoriteButton toolPath="/tip-calculator" toolName="Tip Calculator" />
         </div>
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2 md:mb-3">Tip Calculator</h1>
         <p className="text-base md:text-lg text-gray-600">Calculate tips and split bills with ease - perfect for dining out</p>
@@ -327,6 +338,15 @@ export function TipCalculator() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Practical Tips Section */}
+      <PracticalTips toolPath="/tip-calculator" />
+
+      {/* FAQ Section */}
+      <FAQSection toolPath="/tip-calculator" />
+
+      {/* Related Tools */}
+      <RelatedTools currentPath="/tip-calculator" />
     </div>
   );
 }
