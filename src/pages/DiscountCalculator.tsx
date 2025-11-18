@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { AdPlaceholder } from '@/components/AdSense';
+import { Percent, DollarSign, Tag } from 'lucide-react';
 
 export function DiscountCalculator() {
   const [originalPrice, setOriginalPrice] = useState('');
@@ -29,84 +30,118 @@ export function DiscountCalculator() {
   const quickDiscounts = [10, 20, 25, 30, 50, 75];
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Discount Calculator</h1>
-        <p className="text-gray-600">Calculate sale prices and your savings</p>
+    <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6 md:py-8">
+      <div className="mb-6 text-center md:text-left">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">Discount Calculator</h1>
+        <p className="text-base md:text-lg text-gray-600">Calculate sale prices and your savings</p>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-3 gap-4 md:gap-6">
+        {/* Mobile Results - Top on mobile */}
+        <div className="md:hidden">
+          <Card className="border-2 border-purple-200 bg-gradient-to-br from-purple-50 via-white to-purple-50 sticky top-20 z-10 shadow-lg">
+            <CardContent className="p-4">
+              <div className="space-y-3">
+                <div className="bg-white/80 backdrop-blur-sm rounded-lg p-3 border border-purple-200">
+                  <p className="text-xs font-medium text-gray-600 mb-1 flex items-center gap-1">
+                    <Tag className="h-3 w-3" />
+                    Final Price
+                  </p>
+                  <p className="text-3xl font-bold text-purple-700">${finalPrice.toFixed(2)}</p>
+                </div>
+                <div className="bg-white/80 backdrop-blur-sm rounded-lg p-3 border border-purple-200">
+                  <p className="text-xs font-medium text-gray-600 mb-1">You Save</p>
+                  <p className="text-2xl font-bold text-emerald-600">${savings.toFixed(2)}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         <div className="md:col-span-2">
-          <Card>
-            <CardHeader>
+          <Card className="border-2">
+            <CardHeader className="bg-gradient-to-br from-purple-50/50 to-white">
               <CardTitle>Sale Information</CardTitle>
               <CardDescription>Enter the original price and discount</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-4 md:space-y-6 pt-4 md:pt-6">
               <div>
-                <Label htmlFor="originalPrice">Original Price ($)</Label>
+                <Label htmlFor="originalPrice" className="text-sm md:text-base font-semibold">Original Price ($)</Label>
                 <Input
                   id="originalPrice"
                   type="number"
+                  inputMode="decimal"
                   step="0.01"
                   placeholder="100.00"
                   value={originalPrice}
                   onChange={(e) => setOriginalPrice(e.target.value)}
-                  className="text-lg"
+                  className="text-lg h-14 md:h-12"
                 />
               </div>
 
               <div>
-                <Label htmlFor="discount">Discount (%)</Label>
-                <Input
-                  id="discount"
-                  type="number"
-                  step="1"
-                  placeholder="20"
-                  value={discount}
-                  onChange={(e) => setDiscount(e.target.value)}
-                  className="text-lg"
-                />
-                <div className="flex gap-2 mt-3 flex-wrap">
+                <Label htmlFor="discount" className="text-sm md:text-base font-semibold">Discount (%)</Label>
+                <div className="grid grid-cols-3 gap-2 mb-3">
                   {quickDiscounts.map((percent) => (
                     <Button
                       key={percent}
                       variant={discount === percent.toString() ? 'default' : 'outline'}
                       onClick={() => setDiscount(percent.toString())}
-                      className="flex-1 min-w-[60px]"
+                      className="h-14 md:h-12 text-base md:text-sm font-bold"
                     >
                       {percent}%
                     </Button>
                   ))}
                 </div>
+                <Input
+                  id="discount"
+                  type="number"
+                  inputMode="numeric"
+                  step="1"
+                  placeholder="Custom %"
+                  value={discount}
+                  onChange={(e) => setDiscount(e.target.value)}
+                  className="text-lg h-14 md:h-12"
+                />
               </div>
             </CardContent>
           </Card>
 
-          <div className="mt-6">
+          {/* Hide ad on mobile */}
+          <div className="mt-4 md:mt-6 hidden md:block">
             <AdPlaceholder label="Discount Calculator Ad" />
           </div>
         </div>
 
-        <div className="md:col-span-1">
-          <Card className="bg-purple-50 border-purple-200 sticky top-24">
+        {/* Desktop Results */}
+        <div className="hidden md:block md:col-span-1">
+          <Card className="bg-purple-50 border-purple-200 sticky top-24 border-2">
             <CardHeader>
-              <CardTitle className="text-purple-900">Sale Summary</CardTitle>
+              <CardTitle className="text-purple-900 flex items-center gap-2">
+                <Percent className="h-5 w-5" />
+                Sale Summary
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div>
-                <p className="text-sm text-purple-700 mb-1">Final Price</p>
-                <p className="text-3xl font-bold text-purple-900">${finalPrice.toFixed(2)}</p>
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-purple-200">
+                <p className="text-sm text-purple-700 mb-1 flex items-center gap-1">
+                  <Tag className="h-4 w-4" />
+                  Final Price
+                </p>
+                <p className="text-4xl font-bold text-purple-900">${finalPrice.toFixed(2)}</p>
               </div>
-              <div className="border-t border-purple-200 pt-4">
-                <p className="text-sm text-purple-700 mb-1">You Save</p>
-                <p className="text-2xl font-bold text-purple-900">${savings.toFixed(2)}</p>
+
+              <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl p-4 border border-emerald-200">
+                <p className="text-sm text-emerald-700 mb-1 flex items-center gap-1">
+                  <DollarSign className="h-4 w-4" />
+                  You Save
+                </p>
+                <p className="text-3xl font-bold text-emerald-700">${savings.toFixed(2)}</p>
               </div>
+
               {originalPrice && discount && (
-                <div className="border-t border-purple-200 pt-4">
-                  <p className="text-sm text-purple-700">
-                    That's {discount}% off the original price of ${parseFloat(originalPrice).toFixed(2)}
-                  </p>
+                <div className="text-center pt-2">
+                  <p className="text-sm text-gray-600">{discount}% off</p>
                 </div>
               )}
             </CardContent>
@@ -114,26 +149,18 @@ export function DiscountCalculator() {
         </div>
       </div>
 
-      <div className="mt-8 prose max-w-none">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">How to Use the Discount Calculator</h2>
-        <p className="text-gray-600 mb-4">
-          Shopping for deals? This discount calculator helps you quickly find out how much you'll pay after a
-          discount and how much money you're saving. Perfect for Black Friday, Cyber Monday, or any sale!
-        </p>
-        <h3 className="text-xl font-bold text-gray-900 mb-3">Shopping Tips</h3>
-        <ul className="list-disc list-inside text-gray-600 space-y-2 mb-4">
-          <li>Compare final prices across different stores</li>
-          <li>Stack coupons and sales for maximum savings</li>
-          <li>Calculate if bulk discounts are worth it</li>
-          <li>Set a budget and stick to it</li>
-        </ul>
-        <h3 className="text-xl font-bold text-gray-900 mb-3">Common Sale Events</h3>
-        <p className="text-gray-600">
-          <strong>Black Friday:</strong> Typically 30-70% off<br />
-          <strong>Cyber Monday:</strong> Online deals, 20-50% off<br />
-          <strong>End of Season:</strong> 50-75% off clothing<br />
-          <strong>Clearance Sales:</strong> Up to 90% off
-        </p>
+      {/* Info Section */}
+      <div className="mt-8 md:mt-12">
+        <Card className="border-2">
+          <CardContent className="p-6 md:p-8">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 md:mb-4">How to Use the Discount Calculator</h2>
+            <p className="text-sm md:text-base text-gray-600 leading-relaxed">
+              Enter the original price of the item and the discount percentage. The calculator will show you
+              the final price you'll pay and how much money you're saving. Use the quick buttons for common
+              discount percentages, or enter a custom percentage for exact calculations.
+            </p>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

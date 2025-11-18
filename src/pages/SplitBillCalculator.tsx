@@ -32,67 +32,98 @@ export function SplitBillCalculator() {
   }, [totalBill, numPeople, tip]);
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Split Bill Calculator</h1>
-        <p className="text-gray-600">Easily split bills and expenses with friends</p>
+    <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6 md:py-8">
+      <div className="mb-6 md:mb-8 text-center md:text-left">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">Split Bill Calculator</h1>
+        <p className="text-base md:text-lg text-gray-600">Easily split bills and expenses with friends</p>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-6">
+      {/* Mobile Results - Sticky at top */}
+      {totalBill && parseFloat(totalBill) > 0 && (
+        <Card className="md:hidden bg-teal-50 border-teal-200 sticky top-20 z-10 shadow-lg mb-4">
+          <CardContent className="pt-4 space-y-3">
+            <div>
+              <p className="text-xs text-teal-700 mb-1">Each Person Pays</p>
+              <p className="text-3xl font-bold text-teal-900">${perPerson.toFixed(2)}</p>
+            </div>
+            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-teal-200">
+              <div>
+                <p className="text-xs text-teal-700 mb-1">Tip Amount</p>
+                <p className="text-lg font-bold text-teal-900">${tipAmount.toFixed(2)}</p>
+              </div>
+              <div>
+                <p className="text-xs text-teal-700 mb-1">Total with Tip</p>
+                <p className="text-lg font-bold text-teal-900">${totalWithTip.toFixed(2)}</p>
+              </div>
+            </div>
+            <div className="pt-2 border-t border-teal-200">
+              <p className="text-xs text-teal-700">
+                Splitting <strong>${totalWithTip.toFixed(2)}</strong> between <strong>{numPeople}</strong> {parseInt(numPeople) === 1 ? 'person' : 'people'}
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      <div className="grid md:grid-cols-3 gap-4 md:gap-6">
         <div className="md:col-span-2">
           <Card>
             <CardHeader>
               <CardTitle>Bill Details</CardTitle>
               <CardDescription>Enter the total and number of people</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-4 md:space-y-6">
               <div>
-                <Label htmlFor="totalBill">Total Bill ($)</Label>
+                <Label htmlFor="totalBill" className="text-sm md:text-base">Total Bill ($)</Label>
                 <Input
                   id="totalBill"
                   type="number"
+                  inputMode="decimal"
                   step="0.01"
                   placeholder="100.00"
                   value={totalBill}
                   onChange={(e) => setTotalBill(e.target.value)}
-                  className="text-lg"
+                  className="text-lg h-14 md:h-12"
                 />
               </div>
 
               <div>
-                <Label htmlFor="numPeople">Number of People</Label>
+                <Label htmlFor="numPeople" className="text-sm md:text-base">Number of People</Label>
                 <Input
                   id="numPeople"
                   type="number"
+                  inputMode="numeric"
                   min="1"
                   placeholder="2"
                   value={numPeople}
                   onChange={(e) => setNumPeople(e.target.value)}
-                  className="text-lg"
+                  className="text-lg h-14 md:h-12"
                 />
               </div>
 
               <div>
-                <Label htmlFor="tip">Tip (%)</Label>
+                <Label htmlFor="tip" className="text-sm md:text-base">Tip (%)</Label>
                 <Input
                   id="tip"
                   type="number"
+                  inputMode="decimal"
                   step="1"
                   placeholder="15"
                   value={tip}
                   onChange={(e) => setTip(e.target.value)}
-                  className="text-lg"
+                  className="text-lg h-14 md:h-12"
                 />
               </div>
             </CardContent>
           </Card>
 
-          <div className="mt-6">
+          <div className="mt-6 hidden md:block">
             <AdPlaceholder label="Split Bill Calculator Ad" />
           </div>
         </div>
 
-        <div className="md:col-span-1">
+        {/* Desktop Results - Hidden on mobile */}
+        <div className="hidden md:block md:col-span-1">
           <Card className="bg-teal-50 border-teal-200 sticky top-24">
             <CardHeader>
               <CardTitle className="text-teal-900">Split Summary</CardTitle>
@@ -118,7 +149,7 @@ export function SplitBillCalculator() {
         </div>
       </div>
 
-      <div className="mt-8 prose max-w-none">
+      <div className="mt-8 md:mt-12 prose max-w-none">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">How to Split a Bill Fairly</h2>
         <p className="text-gray-600 mb-4">
           Splitting a bill can be awkward, but our calculator makes it simple. Just enter the total bill,

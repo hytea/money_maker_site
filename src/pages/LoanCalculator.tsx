@@ -3,6 +3,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { AdPlaceholder } from '@/components/AdSense';
+import { DollarSign, TrendingUp, Calendar } from 'lucide-react';
 
 export function LoanCalculator() {
   const [loanAmount, setLoanAmount] = useState('');
@@ -43,119 +44,150 @@ export function LoanCalculator() {
   }, [loanAmount, interestRate, loanTerm]);
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Loan Calculator</h1>
-        <p className="text-gray-600">Calculate monthly payments for loans and mortgages</p>
+    <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6 md:py-8">
+      <div className="mb-6 text-center md:text-left">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">Loan Calculator</h1>
+        <p className="text-base md:text-lg text-gray-600">Calculate monthly payments for loans and mortgages</p>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-3 gap-4 md:gap-6">
+        {/* Mobile Results - Top on mobile */}
+        <div className="md:hidden">
+          <Card className="border-2 border-blue-200 bg-gradient-to-br from-blue-50 via-white to-blue-50 sticky top-20 z-10 shadow-lg">
+            <CardContent className="p-4">
+              <div className="space-y-3">
+                <div className="bg-white/80 backdrop-blur-sm rounded-lg p-3 border border-blue-200">
+                  <p className="text-xs font-medium text-gray-600 mb-1 flex items-center gap-1">
+                    <DollarSign className="h-3 w-3" />
+                    Monthly Payment
+                  </p>
+                  <p className="text-3xl font-bold text-blue-700">${monthlyPayment.toFixed(2)}</p>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-white/80 backdrop-blur-sm rounded-lg p-3 border border-blue-200">
+                    <p className="text-xs font-medium text-gray-600 mb-1">Total Payment</p>
+                    <p className="text-lg font-bold text-gray-900">${totalPayment.toFixed(2)}</p>
+                  </div>
+                  <div className="bg-white/80 backdrop-blur-sm rounded-lg p-3 border border-blue-200">
+                    <p className="text-xs font-medium text-gray-600 mb-1">Total Interest</p>
+                    <p className="text-lg font-bold text-gray-900">${totalInterest.toFixed(2)}</p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         <div className="md:col-span-2">
-          <Card>
-            <CardHeader>
+          <Card className="border-2">
+            <CardHeader className="bg-gradient-to-br from-blue-50/50 to-white">
               <CardTitle>Loan Details</CardTitle>
               <CardDescription>Enter your loan information</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-4 md:space-y-6 pt-4 md:pt-6">
               <div>
-                <Label htmlFor="loanAmount">Loan Amount ($)</Label>
+                <Label htmlFor="loanAmount" className="text-sm md:text-base font-semibold">Loan Amount ($)</Label>
                 <Input
                   id="loanAmount"
                   type="number"
+                  inputMode="decimal"
                   step="1000"
                   placeholder="200000"
                   value={loanAmount}
                   onChange={(e) => setLoanAmount(e.target.value)}
-                  className="text-lg"
+                  className="text-lg h-14 md:h-12"
                 />
               </div>
 
               <div>
-                <Label htmlFor="interestRate">Annual Interest Rate (%)</Label>
+                <Label htmlFor="interestRate" className="text-sm md:text-base font-semibold">Annual Interest Rate (%)</Label>
                 <Input
                   id="interestRate"
                   type="number"
+                  inputMode="decimal"
                   step="0.1"
                   placeholder="4.5"
                   value={interestRate}
                   onChange={(e) => setInterestRate(e.target.value)}
-                  className="text-lg"
+                  className="text-lg h-14 md:h-12"
                 />
               </div>
 
               <div>
-                <Label htmlFor="loanTerm">Loan Term (Years)</Label>
+                <Label htmlFor="loanTerm" className="text-sm md:text-base font-semibold">Loan Term (Years)</Label>
                 <Input
                   id="loanTerm"
                   type="number"
+                  inputMode="numeric"
                   min="1"
                   placeholder="30"
                   value={loanTerm}
                   onChange={(e) => setLoanTerm(e.target.value)}
-                  className="text-lg"
+                  className="text-lg h-14 md:h-12"
                 />
               </div>
             </CardContent>
           </Card>
 
-          <div className="mt-6">
+          {/* Hide ad on mobile */}
+          <div className="mt-4 md:mt-6 hidden md:block">
             <AdPlaceholder label="Loan Calculator Ad" />
           </div>
         </div>
 
-        <div className="md:col-span-1">
-          <Card className="bg-blue-50 border-blue-200 sticky top-24">
+        {/* Desktop Results - Side on desktop */}
+        <div className="hidden md:block md:col-span-1">
+          <Card className="bg-blue-50 border-blue-200 sticky top-24 border-2">
             <CardHeader>
-              <CardTitle className="text-blue-900">Payment Summary</CardTitle>
+              <CardTitle className="text-blue-900 flex items-center gap-2">
+                <TrendingUp className="h-5 w-5" />
+                Payment Summary
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-blue-200">
+                <p className="text-sm text-blue-700 mb-1 flex items-center gap-1">
+                  <DollarSign className="h-4 w-4" />
+                  Monthly Payment
+                </p>
+                <p className="text-4xl font-bold text-blue-900">${monthlyPayment.toFixed(2)}</p>
+              </div>
+
+              <div className="pt-2">
+                <p className="text-sm text-gray-600 mb-1">Total Payment</p>
+                <p className="text-2xl font-bold text-gray-900">${totalPayment.toFixed(2)}</p>
+              </div>
+
               <div>
-                <p className="text-sm text-blue-700 mb-1">Monthly Payment</p>
-                <p className="text-3xl font-bold text-blue-900">
-                  ${isFinite(monthlyPayment) ? monthlyPayment.toFixed(2) : '0.00'}
-                </p>
+                <p className="text-sm text-gray-600 mb-1">Total Interest</p>
+                <p className="text-2xl font-bold text-gray-900">${totalInterest.toFixed(2)}</p>
               </div>
-              <div className="border-t border-blue-200 pt-4">
-                <p className="text-sm text-blue-700 mb-1">Total Payment</p>
-                <p className="text-2xl font-bold text-blue-900">
-                  ${isFinite(totalPayment) ? totalPayment.toFixed(2) : '0.00'}
-                </p>
-              </div>
-              <div className="border-t border-blue-200 pt-4">
-                <p className="text-sm text-blue-700 mb-1">Total Interest</p>
-                <p className="text-2xl font-bold text-blue-900">
-                  ${isFinite(totalInterest) ? totalInterest.toFixed(2) : '0.00'}
-                </p>
-              </div>
+
+              {loanAmount && interestRate && loanTerm && (
+                <div className="pt-3 border-t border-blue-200">
+                  <div className="flex items-center gap-2 text-xs text-gray-600">
+                    <Calendar className="h-3.5 w-3.5 text-blue-500" />
+                    <span>{parseInt(loanTerm) * 12} monthly payments</span>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
       </div>
 
-      <div className="mt-8 prose max-w-none">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">About Loan Calculations</h2>
-        <p className="text-gray-600 mb-4">
-          This loan calculator helps you estimate monthly payments for mortgages, car loans, personal loans,
-          and student loans. Enter the loan amount, annual interest rate, and loan term to see your monthly
-          payment and total interest.
-        </p>
-        <h3 className="text-xl font-bold text-gray-900 mb-3">Understanding Your Loan</h3>
-        <ul className="list-disc list-inside text-gray-600 space-y-2 mb-4">
-          <li><strong>Monthly Payment:</strong> The amount you'll pay each month</li>
-          <li><strong>Total Payment:</strong> Total amount paid over the life of the loan</li>
-          <li><strong>Total Interest:</strong> How much extra you'll pay in interest</li>
-          <li><strong>Principal:</strong> The original loan amount you borrowed</li>
-        </ul>
-        <h3 className="text-xl font-bold text-gray-900 mb-3">Common Loan Types</h3>
-        <p className="text-gray-600 mb-2">
-          <strong>Mortgages:</strong> Typically 15 or 30 years with interest rates from 3-7%
-        </p>
-        <p className="text-gray-600 mb-2">
-          <strong>Auto Loans:</strong> Usually 3-6 years with rates from 4-10%
-        </p>
-        <p className="text-gray-600">
-          <strong>Personal Loans:</strong> Often 2-5 years with rates from 6-15%
-        </p>
+      {/* Info Section */}
+      <div className="mt-8 md:mt-12">
+        <Card className="border-2">
+          <CardContent className="p-6 md:p-8">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 md:mb-4">How to Use the Loan Calculator</h2>
+            <p className="text-sm md:text-base text-gray-600 leading-relaxed">
+              Enter the loan amount you need, the annual interest rate offered, and the loan term in years.
+              The calculator will instantly show your monthly payment, total amount paid over the loan lifetime,
+              and total interest charges. Perfect for comparing different loan offers and planning your budget.
+            </p>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

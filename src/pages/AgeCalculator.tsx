@@ -54,40 +54,70 @@ export function AgeCalculator() {
   }, [birthDate]);
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Age Calculator</h1>
-        <p className="text-gray-600">Calculate your exact age in years, months, and days</p>
+    <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6 md:py-8">
+      <div className="mb-6 md:mb-8 text-center md:text-left">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">Age Calculator</h1>
+        <p className="text-base md:text-lg text-gray-600">Calculate your exact age in years, months, and days</p>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-6">
+      {/* Mobile Results - Sticky at top */}
+      {birthDate && (
+        <Card className="md:hidden bg-orange-50 border-orange-200 sticky top-20 z-10 shadow-lg mb-4">
+          <CardContent className="pt-4 space-y-3">
+            <div>
+              <p className="text-xs text-orange-700 mb-1">Your Age</p>
+              <p className="text-2xl font-bold text-orange-900">{years} years</p>
+              <p className="text-base text-orange-800">
+                {months} months, {days} days
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-orange-200">
+              <div>
+                <p className="text-xs text-orange-700 mb-1">Total Days</p>
+                <p className="text-lg font-bold text-orange-900">
+                  {totalDays.toLocaleString()}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-orange-700 mb-1">Next Birthday</p>
+                <p className="text-lg font-bold text-orange-900">
+                  {nextBirthday} days
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      <div className="grid md:grid-cols-3 gap-4 md:gap-6">
         <div className="md:col-span-2">
           <Card>
             <CardHeader>
               <CardTitle>Enter Your Birth Date</CardTitle>
               <CardDescription>Find out your exact age</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-4 md:space-y-6">
               <div>
-                <Label htmlFor="birthDate">Date of Birth</Label>
+                <Label htmlFor="birthDate" className="text-sm md:text-base">Date of Birth</Label>
                 <Input
                   id="birthDate"
                   type="date"
                   value={birthDate}
                   onChange={(e) => setBirthDate(e.target.value)}
-                  className="text-lg"
+                  className="text-lg h-14 md:h-12"
                   max={new Date().toISOString().split('T')[0]}
                 />
               </div>
             </CardContent>
           </Card>
 
-          <div className="mt-6">
+          <div className="mt-6 hidden md:block">
             <AdPlaceholder label="Age Calculator Ad" />
           </div>
         </div>
 
-        <div className="md:col-span-1">
+        {/* Desktop Results - Hidden on mobile */}
+        <div className="hidden md:block md:col-span-1">
           <Card className="bg-orange-50 border-orange-200 sticky top-24">
             <CardHeader>
               <CardTitle className="text-orange-900">Your Age</CardTitle>
@@ -129,7 +159,7 @@ export function AgeCalculator() {
         </div>
       </div>
 
-      <div className="mt-8 prose max-w-none">
+      <div className="mt-8 md:mt-12 prose max-w-none">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">How the Age Calculator Works</h2>
         <p className="text-gray-600 mb-4">
           This age calculator determines your age in years, months, and days from your date of birth.
