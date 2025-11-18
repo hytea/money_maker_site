@@ -8,23 +8,23 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-gradient-to-r from-primary-600 to-primary-700 text-primary-foreground shadow-md hover:shadow-glow hover:from-primary-700 hover:to-primary-800 active:shadow-sm",
+          "bg-gradient-to-r from-primary-600 to-primary-700 text-white shadow-lg hover:shadow-glow-lg hover:from-primary-700 hover:to-primary-800 active:shadow-md",
         destructive:
-          "bg-destructive text-destructive-foreground shadow-md hover:bg-destructive/90 hover:shadow-lg",
+          "bg-destructive text-destructive-foreground shadow-lg hover:bg-destructive/90 hover:shadow-xl",
         outline:
-          "border-2 border-primary-300 bg-background hover:bg-accent hover:text-accent-foreground hover:border-primary-400 active:bg-accent/80",
+          "border-2 border-primary-400 bg-white hover:bg-primary-50 text-primary-700 hover:border-primary-500 active:bg-primary-100 shadow-md hover:shadow-lg",
         secondary:
-          "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 hover:shadow-md",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
+          "bg-gray-100 text-gray-900 shadow-md hover:bg-gray-200 hover:shadow-lg",
+        ghost: "hover:bg-gray-100 text-gray-700 hover:text-gray-900",
         link: "text-primary underline-offset-4 hover:underline",
         glass:
-          "glass text-foreground shadow-glass hover:shadow-glow backdrop-blur-md hover:bg-white/30",
+          "bg-white/90 backdrop-blur-md text-foreground shadow-lg hover:shadow-glow-lg border border-gray-200 hover:bg-white",
         gradient:
           "bg-gradient-to-r from-primary-500 via-accent-500 to-primary-600 text-white shadow-glow-lg hover:shadow-glow-accent-lg animate-gradient-shift bg-[length:200%_100%]",
         neumorphic:
           "neumorphic text-foreground hover:shadow-neumorphic-inset active:shadow-neumorphic-inset",
         glow:
-          "bg-primary text-primary-foreground shadow-glow hover:shadow-glow-lg animate-pulse-glow",
+          "bg-primary text-white shadow-glow-lg hover:shadow-glow-accent-lg",
       },
       size: {
         default: "h-10 px-4 py-2",
