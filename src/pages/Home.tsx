@@ -395,7 +395,7 @@ export function Home() {
 
         {/* Why No App? */}
         <div className="mt-12 sm:mt-16 md:mt-20">
-          <div className="bg-gradient-to-br from-primary-50 to-accent-50 rounded-2xl p-6 sm:p-8 border-2 border-primary-200">
+          <div className="bg-white rounded-2xl p-6 sm:p-8 border-2 border-gray-200 shadow-lg">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
               Why Use a Web Calculator?
             </h2>

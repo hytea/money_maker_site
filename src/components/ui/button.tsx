@@ -8,23 +8,23 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-gradient-to-r from-primary-600 to-primary-700 text-white shadow-lg hover:shadow-glow-lg hover:from-primary-700 hover:to-primary-800 active:shadow-md",
+          "bg-gradient-to-r from-[#2563eb] to-[#1d4ed8] text-white shadow-lg hover:shadow-glow-lg hover:from-[#1d4ed8] hover:to-[#1e40af] active:shadow-md",
         destructive:
-          "bg-destructive text-destructive-foreground shadow-lg hover:bg-destructive/90 hover:shadow-xl",
+          "bg-red-600 text-white shadow-lg hover:bg-red-700 hover:shadow-xl",
         outline:
-          "border-2 border-primary-400 bg-white hover:bg-primary-50 text-primary-700 hover:border-primary-500 active:bg-primary-100 shadow-md hover:shadow-lg",
+          "border-2 border-[#60a5fa] bg-white hover:bg-blue-50 text-[#1d4ed8] hover:border-[#2563eb] active:bg-blue-100 shadow-md hover:shadow-lg",
         secondary:
           "bg-gray-100 text-gray-900 shadow-md hover:bg-gray-200 hover:shadow-lg",
         ghost: "hover:bg-gray-100 text-gray-700 hover:text-gray-900",
-        link: "text-primary underline-offset-4 hover:underline",
+        link: "text-[#2563eb] underline-offset-4 hover:underline",
         glass:
-          "bg-white/90 backdrop-blur-md text-foreground shadow-lg hover:shadow-glow-lg border border-gray-200 hover:bg-white",
+          "bg-white/90 backdrop-blur-md text-gray-900 shadow-lg hover:shadow-glow-lg border border-gray-200 hover:bg-white",
         gradient:
-          "bg-gradient-to-r from-primary-500 via-accent-500 to-primary-600 text-white shadow-glow-lg hover:shadow-glow-accent-lg animate-gradient-shift bg-[length:200%_100%]",
+          "bg-gradient-to-r from-[#3b82f6] via-[#d946ef] to-[#2563eb] text-white shadow-glow-lg hover:shadow-glow-accent-lg animate-gradient-shift bg-[length:200%_100%]",
         neumorphic:
-          "neumorphic text-foreground hover:shadow-neumorphic-inset active:shadow-neumorphic-inset",
+          "neumorphic text-gray-900 hover:shadow-neumorphic-inset active:shadow-neumorphic-inset",
         glow:
-          "bg-primary text-white shadow-glow-lg hover:shadow-glow-accent-lg",
+          "bg-[#2563eb] text-white shadow-glow-lg hover:shadow-glow-accent-lg",
       },
       size: {
         default: "h-10 px-4 py-2",
