@@ -10,7 +10,7 @@ export function Layout() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
-      <header className="bg-white/90 backdrop-blur-lg border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+      <header className="bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-lg border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link to="/" className="flex items-center space-x-3 group" onClick={() => setMobileMenuOpen(false)}>

@@ -191,14 +191,14 @@ export function Home() {
                 const Icon = calc.icon;
                 return (
                   <Link key={calc.path} to={calc.path} className="group">
-                    <Card className={`h-full card-hover border-2 ${calc.borderColor} relative overflow-hidden`}>
+                    <Card variant="interactive" className={`h-full border-2 ${calc.borderColor} relative overflow-hidden`}>
                       <CardHeader className="relative p-4 sm:p-5 md:p-6">
-                        <div className={`w-12 sm:w-14 h-12 sm:h-14 rounded-lg sm:rounded-xl ${calc.bgColor} flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform duration-200`}>
+                        <div className={`w-12 sm:w-14 h-12 sm:h-14 rounded-lg sm:rounded-xl ${calc.bgColor} flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform duration-300 shadow-sm group-hover:shadow-md`}>
                           <Icon className={`h-6 sm:h-7 w-6 sm:w-7 ${calc.color}`} />
                         </div>
                         <CardTitle className="text-base sm:text-lg group-hover:text-primary-700 transition-colors flex items-center justify-between">
                           {calc.name}
-                          <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
+                          <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all flex-shrink-0" />
                         </CardTitle>
                         <CardDescription className="text-xs sm:text-sm leading-relaxed">
                           {calc.description}
@@ -226,14 +226,14 @@ export function Home() {
                 const Icon = calc.icon;
                 return (
                   <Link key={calc.path} to={calc.path} className="group">
-                    <Card className={`h-full card-hover border-2 ${calc.borderColor} relative overflow-hidden`}>
+                    <Card variant="interactive" className={`h-full border-2 ${calc.borderColor} relative overflow-hidden`}>
                       <CardHeader className="relative p-4 sm:p-5 md:p-6">
-                        <div className={`w-12 sm:w-14 h-12 sm:h-14 rounded-lg sm:rounded-xl ${calc.bgColor} flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform duration-200`}>
+                        <div className={`w-12 sm:w-14 h-12 sm:h-14 rounded-lg sm:rounded-xl ${calc.bgColor} flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform duration-300 shadow-sm group-hover:shadow-md`}>
                           <Icon className={`h-6 sm:h-7 w-6 sm:w-7 ${calc.color}`} />
                         </div>
                         <CardTitle className="text-base sm:text-lg group-hover:text-primary-700 transition-colors flex items-center justify-between">
                           {calc.name}
-                          <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
+                          <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all flex-shrink-0" />
                         </CardTitle>
                         <CardDescription className="text-xs sm:text-sm leading-relaxed">
                           {calc.description}
@@ -261,21 +261,21 @@ export function Home() {
             const Icon = calc.icon;
             return (
               <Link key={calc.path} to={calc.path} className="group">
-                <Card className={`h-full card-hover border-2 ${calc.borderColor} relative overflow-hidden`}>
+                <Card variant="interactive" className={`h-full border-2 ${calc.borderColor} relative overflow-hidden`}>
                   {calc.popular && (
                     <div className="absolute top-2 sm:top-3 right-2 sm:right-3 z-10">
-                      <Badge variant="default" className="text-[9px] sm:text-[10px] px-1.5 sm:px-2 py-0.5">
+                      <Badge variant="gradient" className="text-[9px] sm:text-[10px] px-1.5 sm:px-2 py-0.5 animate-pulse-glow">
                         POPULAR
                       </Badge>
                     </div>
                   )}
                   <CardHeader className="relative p-4 sm:p-5 md:p-6">
-                    <div className={`w-12 sm:w-14 h-12 sm:h-14 rounded-lg sm:rounded-xl ${calc.bgColor} flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform duration-200`}>
+                    <div className={`w-12 sm:w-14 h-12 sm:h-14 rounded-lg sm:rounded-xl ${calc.bgColor} flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform duration-300 shadow-sm group-hover:shadow-md`}>
                       <Icon className={`h-6 sm:h-7 w-6 sm:w-7 ${calc.color}`} />
                     </div>
                     <CardTitle className="text-base sm:text-lg group-hover:text-primary-700 transition-colors flex items-center justify-between">
                       {calc.name}
-                      <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
+                      <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all flex-shrink-0" />
                     </CardTitle>
                     <CardDescription className="text-xs sm:text-sm leading-relaxed">
                       {calc.description}
@@ -395,7 +395,7 @@ export function Home() {
 
         {/* Why No App? */}
         <div className="mt-12 sm:mt-16 md:mt-20">
-          <div className="bg-gradient-to-br from-primary-50 to-accent-50 rounded-2xl p-6 sm:p-8 border-2 border-primary-200">
+          <div className="bg-white rounded-2xl p-6 sm:p-8 border-2 border-gray-200 shadow-lg">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
               Why Use a Web Calculator?
             </h2>
