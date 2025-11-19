@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { AdSense } from '@/components/AdSense';
+import { InterstitialAd, useInterstitialAd } from '@/components/InterstitialAd';
 import { DollarSign, Users, TrendingUp, CheckCircle2 } from 'lucide-react';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import { ShareButton } from '@/components/ShareButton';
@@ -26,10 +27,14 @@ export function TipCalculator() {
   const [perPerson, setPerPerson] = useState(0);
 
   const { trackCalculatorResult, trackButtonClick } = useAnalytics();
+  const { showInterstitial, triggerInterstitial, dismissInterstitial } = useInterstitialAd();
 
   useEffect(() => {
     document.title = 'Tip Calculator - Calculate Tips and Split Bills | QuickCalc Tools';
     ToolUsageTracker.trackUsage('/tip-calculator');
+
+    // Trigger interstitial ad on mobile
+    triggerInterstitial();
   }, []);
 
   const handleLoadFromHistory = (inputs: Record<string, any>) => {
@@ -66,8 +71,10 @@ export function TipCalculator() {
   const quickTipButtons = [10, 15, 18, 20, 25];
 
   return (
-    <div className="max-w-6xl mx-auto px-3 sm:px-4 py-6 md:py-12">
-      {/* Page Header */}
+    <>
+      <InterstitialAd show={showInterstitial} onDismiss={dismissInterstitial} />
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 py-6 md:py-12">
+        {/* Page Header */}
       <div className="mb-6 md:mb-8">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-3 md:mb-4">
           <div>
@@ -347,6 +354,7 @@ export function TipCalculator() {
 
       {/* Related Tools */}
       <RelatedTools currentPath="/tip-calculator" />
-    </div>
+      </div>
+    </>
   );
 }

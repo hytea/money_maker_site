@@ -3,6 +3,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { AdSense } from '@/components/AdSense';
+import { InterstitialAd, useInterstitialAd } from '@/components/InterstitialAd';
 
 export function PregnancyCalculator() {
   const [lastPeriod, setLastPeriod] = useState('');
@@ -14,8 +15,11 @@ export function PregnancyCalculator() {
   const [trimester, setTrimester] = useState(0);
   const [daysUntilDue, setDaysUntilDue] = useState(0);
 
+  const { showInterstitial, triggerInterstitial, dismissInterstitial } = useInterstitialAd();
+
   useEffect(() => {
     document.title = 'Pregnancy Due Date Calculator - Calculate Your Due Date | QuickCalc Tools';
+    triggerInterstitial();
   }, []);
 
   useEffect(() => {
@@ -50,7 +54,9 @@ export function PregnancyCalculator() {
   }, [lastPeriod, cycleLength]);
 
   return (
-    <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6 md:py-8">
+    <>
+      <InterstitialAd show={showInterstitial} onDismiss={dismissInterstitial} />
+      <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6 md:py-8">
       <div className="mb-6 md:mb-8 text-center md:text-left">
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">Pregnancy Due Date Calculator</h1>
         <p className="text-base md:text-lg text-gray-600">Calculate your pregnancy due date and timeline</p>
@@ -191,6 +197,7 @@ export function PregnancyCalculator() {
           an ultrasound to confirm your due date and check on baby's development.
         </p>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

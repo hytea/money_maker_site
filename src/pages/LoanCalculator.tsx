@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { AdSense } from '@/components/AdSense';
+import { InterstitialAd, useInterstitialAd } from '@/components/InterstitialAd';
 import { ResultInsights } from '@/components/ResultInsights';
 import { DollarSign, TrendingUp, Calendar, Download, PieChart } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, PieChart as RePieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
@@ -19,8 +20,11 @@ export function LoanCalculator() {
   const [totalInterest, setTotalInterest] = useState(0);
   const [amortizationData, setAmortizationData] = useState<any[]>([]);
 
+  const { showInterstitial, triggerInterstitial, dismissInterstitial } = useInterstitialAd();
+
   useEffect(() => {
     document.title = 'Loan Calculator - Calculate Monthly Payments & Export PDF Report | QuickCalc Tools';
+    triggerInterstitial();
   }, []);
 
   useEffect(() => {
@@ -185,8 +189,10 @@ export function LoanCalculator() {
   const hasResults = monthlyPayment > 0;
 
   return (
-    <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6 md:py-8">
-      <div className="mb-6 text-center md:text-left">
+    <>
+      <InterstitialAd show={showInterstitial} onDismiss={dismissInterstitial} />
+      <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6 md:py-8">
+        <div className="mb-6 text-center md:text-left">
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">Loan Calculator</h1>
         <p className="text-base md:text-lg text-gray-600">Calculate monthly payments for loans and mortgages</p>
       </div>
@@ -558,6 +564,7 @@ export function LoanCalculator() {
           </CardContent>
         </Card>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

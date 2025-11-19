@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { AdSense } from '@/components/AdSense';
+import { InterstitialAd, useInterstitialAd } from '@/components/InterstitialAd';
 
 type ConversionCategory = 'cooking' | 'weight' | 'distance';
 
@@ -54,8 +55,11 @@ export function UnitConverter() {
   const [fromValue, setFromValue] = useState('');
   const [toValue, setToValue] = useState('');
 
+  const { showInterstitial, triggerInterstitial, dismissInterstitial } = useInterstitialAd();
+
   useEffect(() => {
     document.title = 'Unit Converter - Cooking, Weight & Distance | QuickCalc Tools';
+    triggerInterstitial();
   }, []);
 
   useEffect(() => {
@@ -80,7 +84,9 @@ export function UnitConverter() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6 md:py-8">
+    <>
+      <InterstitialAd show={showInterstitial} onDismiss={dismissInterstitial} />
+      <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6 md:py-8">
       <div className="mb-6 md:mb-8 text-center md:text-left">
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">Unit Converter</h1>
         <p className="text-base md:text-lg text-gray-600">Convert cooking, weight, and distance measurements</p>
@@ -254,6 +260,7 @@ export function UnitConverter() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

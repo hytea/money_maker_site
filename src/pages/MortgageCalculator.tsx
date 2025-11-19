@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { InterstitialAd, useInterstitialAd } from '@/components/InterstitialAd';
 import { ShareButton } from '@/components/ShareButton';
 import { CalculationHistory } from '@/components/CalculationHistory';
 import { ResultInsights } from '@/components/ResultInsights';
@@ -51,8 +52,11 @@ export function MortgageCalculator() {
 
   const { trackCalculatorResult } = useAnalytics();
 
+  const { showInterstitial, triggerInterstitial, dismissInterstitial } = useInterstitialAd();
+
   useEffect(() => {
     document.title = 'Mortgage Calculator - Calculate Monthly Payments & Total Interest | QuickCalc Tools';
+    triggerInterstitial();
   }, []);
 
   // Calculate mortgage
@@ -276,7 +280,9 @@ export function MortgageCalculator() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-3 sm:px-4 py-6 md:py-12">
+    <>
+      <InterstitialAd show={showInterstitial} onDismiss={dismissInterstitial} />
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 py-6 md:py-12">
       {/* Header */}
       <div className="mb-6 md:mb-8 text-center md:text-left">
         <div className="inline-flex items-center gap-2 mb-3">
@@ -922,6 +928,7 @@ export function MortgageCalculator() {
           </CardContent>
         </Card>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

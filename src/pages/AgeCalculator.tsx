@@ -3,6 +3,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { AdSense } from '@/components/AdSense';
+import { InterstitialAd, useInterstitialAd } from '@/components/InterstitialAd';
 
 export function AgeCalculator() {
   const [birthDate, setBirthDate] = useState('');
@@ -12,8 +13,11 @@ export function AgeCalculator() {
   const [totalDays, setTotalDays] = useState(0);
   const [nextBirthday, setNextBirthday] = useState(0);
 
+  const { showInterstitial, triggerInterstitial, dismissInterstitial } = useInterstitialAd();
+
   useEffect(() => {
     document.title = 'Age Calculator - Calculate Your Exact Age | QuickCalc Tools';
+    triggerInterstitial();
   }, []);
 
   useEffect(() => {
@@ -54,7 +58,9 @@ export function AgeCalculator() {
   }, [birthDate]);
 
   return (
-    <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6 md:py-8">
+    <>
+      <InterstitialAd show={showInterstitial} onDismiss={dismissInterstitial} />
+      <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6 md:py-8">
       <div className="mb-6 md:mb-8 text-center md:text-left">
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">Age Calculator</h1>
         <p className="text-base md:text-lg text-gray-600">Calculate your exact age in years, months, and days</p>
@@ -177,6 +183,7 @@ export function AgeCalculator() {
           (with some exceptions). Our calculator accounts for this to give you the most accurate age possible.
         </p>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

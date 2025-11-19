@@ -3,6 +3,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { AdSense } from '@/components/AdSense';
+import { InterstitialAd, useInterstitialAd } from '@/components/InterstitialAd';
 
 export function SplitBillCalculator() {
   const [totalBill, setTotalBill] = useState('');
@@ -13,8 +14,11 @@ export function SplitBillCalculator() {
   const [totalWithTip, setTotalWithTip] = useState(0);
   const [perPerson, setPerPerson] = useState(0);
 
+  const { showInterstitial, triggerInterstitial, dismissInterstitial } = useInterstitialAd();
+
   useEffect(() => {
     document.title = 'Split Bill Calculator - Split Costs with Friends | QuickCalc Tools';
+    triggerInterstitial();
   }, []);
 
   useEffect(() => {
@@ -32,7 +36,9 @@ export function SplitBillCalculator() {
   }, [totalBill, numPeople, tip]);
 
   return (
-    <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6 md:py-8">
+    <>
+      <InterstitialAd show={showInterstitial} onDismiss={dismissInterstitial} />
+      <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6 md:py-8">
       <div className="mb-6 md:mb-8 text-center md:text-left">
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">Split Bill Calculator</h1>
         <p className="text-base md:text-lg text-gray-600">Easily split bills and expenses with friends</p>
@@ -167,6 +173,7 @@ export function SplitBillCalculator() {
           gift purchases, and any situation where costs need to be divided equally among friends or family.
         </p>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

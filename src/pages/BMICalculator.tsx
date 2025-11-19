@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { AdSense } from '@/components/AdSense';
+import { InterstitialAd, useInterstitialAd } from '@/components/InterstitialAd';
 import { ResultInsights } from '@/components/ResultInsights';
 import { AIInsights } from '@/components/AIInsights';
 import { Download, Activity, Target } from 'lucide-react';
@@ -24,8 +25,11 @@ export function BMICalculator() {
   const [category, setCategory] = useState('');
   const [calories, setCalories] = useState(0);
 
+  const { showInterstitial, triggerInterstitial, dismissInterstitial } = useInterstitialAd();
+
   useEffect(() => {
     document.title = 'BMI Calculator & Calorie Calculator - Export PDF Report | QuickCalc Tools';
+    triggerInterstitial();
   }, []);
 
   useEffect(() => {
@@ -208,7 +212,9 @@ export function BMICalculator() {
   const hasResults = bmi > 0;
 
   return (
-    <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6 md:py-8">
+    <>
+      <InterstitialAd show={showInterstitial} onDismiss={dismissInterstitial} />
+      <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6 md:py-8">
       <div className="mb-6 md:mb-8 text-center md:text-left">
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">BMI & Calorie Calculator</h1>
         <p className="text-base md:text-lg text-gray-600">Calculate your Body Mass Index and daily calorie needs</p>
@@ -642,6 +648,7 @@ export function BMICalculator() {
           500 calories from your maintenance calories. To gain weight, add 500 calories.
         </p>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

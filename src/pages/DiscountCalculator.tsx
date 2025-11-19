@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { AdSense } from '@/components/AdSense';
+import { InterstitialAd, useInterstitialAd } from '@/components/InterstitialAd';
 import { Percent, DollarSign, Tag } from 'lucide-react';
 
 export function DiscountCalculator() {
@@ -12,8 +13,11 @@ export function DiscountCalculator() {
   const [finalPrice, setFinalPrice] = useState(0);
   const [savings, setSavings] = useState(0);
 
+  const { showInterstitial, triggerInterstitial, dismissInterstitial } = useInterstitialAd();
+
   useEffect(() => {
     document.title = 'Discount Calculator - Calculate Sale Prices & Savings | QuickCalc Tools';
+    triggerInterstitial();
   }, []);
 
   useEffect(() => {
@@ -30,7 +34,9 @@ export function DiscountCalculator() {
   const quickDiscounts = [10, 20, 25, 30, 50, 75];
 
   return (
-    <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6 md:py-8">
+    <>
+      <InterstitialAd show={showInterstitial} onDismiss={dismissInterstitial} />
+      <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6 md:py-8">
       <div className="mb-6 text-center md:text-left">
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">Discount Calculator</h1>
         <p className="text-base md:text-lg text-gray-600">Calculate sale prices and your savings</p>
@@ -162,6 +168,7 @@ export function DiscountCalculator() {
           </CardContent>
         </Card>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
